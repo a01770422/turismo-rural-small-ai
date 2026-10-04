@@ -1,0 +1,6 @@
+# Los .json de esta carpeta se sirven a través de index.php, no directamente.
+# Los que empiezan por _ son de uso interno (el frasario, las tablas de pronunciación):
+# no deben poder descargarse sueltos.
+<FilesMatch "^_">
+  Require all denied
+</FilesMatch>

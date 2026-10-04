@@ -1,0 +1,1010 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Turismo Rural</title>
+<script>/* tema antes de pintar: evita el destello blanco en modo oscuro */
+try{const t=localStorage.getItem('theme');if(t)document.documentElement.dataset.theme=t}catch{}</script>
+<style>
+:root{color-scheme:light;
+  --bg:#faf8f4;--fg:#1f2328;--card:#fff;--mut:#6b6f76;--line:#d5d2cc;--ac:#2f6f4f;--ac-fg:#fff;
+  --soft:#f3f1ec;--tint:#eef5f1;--blue:#3b6fb6;--blue-tint:#eaf0fa;--tag:#e8f0ec;--bar:#e5e5e5;--shadow:#0002;
+  --wall:#efeae2;--outb:#d9fdd3;--warn:#fff3cd;--bad:#c0392b;--bad-bg:#fdecea;--ok-bg:#e6f4ea;--pend:#ffe9a8;--appr:#dbe9ff;--done:#d7f0dd;--gold:#d39e00}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;
+  --bg:#14171a;--fg:#e8e6e3;--card:#1e2226;--mut:#9aa0a6;--line:#3a3f45;--ac:#5fbf8f;--ac-fg:#0d1f16;
+  --soft:#262b30;--tint:#1c2b24;--blue:#6b9be0;--blue-tint:#1d2635;--tag:#233229;--bar:#33383e;--shadow:#0009;
+  --wall:#0b141a;--outb:#005c4b;--warn:#3a3013;--bad:#ef6b5b;--bad-bg:#3a1f1d;--ok-bg:#1c3326;--pend:#4a3d12;--appr:#1e3050;--done:#1c3a28;--gold:#f0c040}}
+:root[data-theme="dark"]{color-scheme:dark;
+  --bg:#14171a;--fg:#e8e6e3;--card:#1e2226;--mut:#9aa0a6;--line:#3a3f45;--ac:#5fbf8f;--ac-fg:#0d1f16;
+  --soft:#262b30;--tint:#1c2b24;--blue:#6b9be0;--blue-tint:#1d2635;--tag:#233229;--bar:#33383e;--shadow:#0009;
+  --wall:#0b141a;--outb:#005c4b;--warn:#3a3013;--bad:#ef6b5b;--bad-bg:#3a1f1d;--ok-bg:#1c3326;--pend:#4a3d12;--appr:#1e3050;--done:#1c3a28;--gold:#f0c040}
+[hidden]{display:none!important}*{box-sizing:border-box}body{margin:0;font-family:system-ui,sans-serif;background:var(--bg);color:var(--fg)}
+.ic{width:1.15em;height:1.15em;vertical-align:-.2em;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.ic.fill{fill:currentColor;stroke:none}.star{color:var(--gold)}
+header{display:flex;gap:8px;padding:12px;align-items:center;position:sticky;top:0;background:var(--bg);z-index:5}
+.uilang{margin:0;height:38px;border-radius:19px;padding:0 10px;max-width:132px;flex:none}
+.sbox{flex:1;position:relative;display:flex}.sbox .ic{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--mut)}.sbox input{padding-left:40px}
+input,textarea,select{font-family:inherit;font-size:16px;color:var(--fg);background:var(--card);border:1px solid var(--line)}
+input,textarea{flex:1;padding:10px 14px;border-radius:22px;width:100%}textarea{border-radius:12px}
+select{padding:8px;border-radius:10px;margin:4px 0}
+button{background:var(--ac);color:var(--ac-fg);border:0;border-radius:18px;padding:9px 16px;font-size:15px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-family:inherit}
+button.alt{background:var(--card);color:var(--ac);border:1px solid var(--ac)}button:disabled{opacity:.6;cursor:default}
+button.icon{padding:9px 11px}
+nav{display:flex;gap:8px;padding:0 12px;flex-wrap:wrap}
+main{padding:12px;max-width:1040px;margin:auto}h2{margin:18px 0 8px}a{color:var(--ac)}
+.row{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+.card{background:var(--card);border-radius:12px;padding:14px;box-shadow:0 1px 4px var(--shadow);display:flex;flex-direction:column;min-height:150px}
+.card h3{margin:0 0 4px;font-size:17px;line-height:1.25}.card p{margin:4px 0 10px;font-size:14px;color:var(--mut);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}.card>button{margin-top:auto;align-self:flex-start}
+.meta{display:flex;gap:8px;align-items:center;font-size:13px;margin-bottom:8px}
+.box{background:var(--card);border-radius:12px;padding:12px;margin-top:12px}
+.warn{background:var(--warn);padding:8px 10px;border-radius:8px}.hide{display:none}small{color:var(--mut)}
+.tag2{background:var(--tag);border-radius:10px;padding:2px 8px;font-size:12px;display:inline-flex;align-items:center;gap:4px}
+label{font-size:13px;display:block;margin:6px 0}
+dialog{border:0;border-radius:12px;max-width:560px;width:92%;max-height:85vh;background:var(--card);color:var(--fg)}dialog::backdrop{background:#0008}
+#rv input,#rv select,#rv textarea{margin:4px 0}.big{font-size:17px;padding:12px 20px}
+.alert{border-left:6px solid var(--bad);background:var(--bad-bg)}
+summary{cursor:pointer;padding:10px 0;font-size:15px}summary .ic{margin-right:4px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:8px}.guide{margin:0 0 8px;font-size:15px}
+.net{padding:8px 12px;border-radius:10px;margin:8px 0;font-size:14px;display:flex;gap:8px;align-items:center}.net.on{background:var(--ok-bg)}.net.off{background:var(--warn)}
+.dot{display:inline-block;width:9px;height:9px;border-radius:50%;flex:none}.dot.pending{background:#e0a800}.dot.approved{background:#3b82f6}.dot.synced{background:#2e9e5b}
+.mh{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:8px}
+.st{margin-left:auto;font-size:12px;padding:2px 8px;border-radius:10px;background:var(--soft);display:inline-flex;align-items:center;gap:5px}
+.st.pending{background:var(--pend)}.st.approved{background:var(--appr)}.st.synced{background:var(--done)}
+blockquote{margin:0;padding:10px 12px;background:var(--soft);border-radius:10px;font-size:17px}
+.tr{margin:6px 0;font-size:14px}.lbl{margin:12px 0 4px;font-weight:600;font-size:14px}.ans{margin:10px 0;display:flex;gap:6px;align-items:baseline}
+.ans .ic{color:var(--ac)}.pv{font-size:13px;color:var(--mut);margin:4px 0}.sm{font-size:13px;padding:6px 12px}
+.q{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;margin:6px 0}.chip{font-size:14px;padding:8px 12px;border-radius:10px;min-height:42px;justify-content:flex-start;text-align:left;line-height:1.2}.q .none{grid-column:1/-1}
+.acts{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}.fix{font-size:13px;color:var(--mut);margin-top:6px}.fix summary{font-size:13px;padding:6px 0}
+.ex{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0}.empty{text-align:center;padding:24px}.empty .ic{width:36px;height:36px;color:var(--mut);display:block;margin:0 auto 6px}
+.tools{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.tg{display:inline-flex;gap:6px;align-items:center;margin:0;font-size:14px;cursor:pointer}.tg input{width:auto;margin:0}
+/* ---- Conversar: traductor cara a cara ---- */
+/* Barra de idiomas (como el traductor): tu idioma · intercambiar · idioma del visitante */
+.lbar{display:flex;align-items:flex-end;gap:10px;background:var(--card);border-radius:14px;padding:10px 14px;box-shadow:0 1px 4px var(--shadow);margin-top:10px}
+.lsel{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}
+.lsel small{font-weight:700;font-size:12px;display:flex;gap:5px;align-items:center}
+.lsel.v small{color:var(--blue)}.lsel.m small{color:var(--ac)}
+.lsel select{margin:0;width:100%;height:42px;border-radius:11px}
+.swap{width:42px;height:42px;padding:0;border-radius:21px;justify-content:center;flex:none;margin-bottom:0;transition:transform .35s ease}
+.swap.spin{transform:rotate(180deg)}
+.cvgrid{display:grid;grid-template-columns:1fr 1fr;grid-template-areas:"v m" "log log";gap:12px;margin-top:12px}
+.cvgrid>.vis{grid-area:v}.cvgrid>.mine{grid-area:m}.logw{grid-area:log}
+@media (max-width:760px){.cvgrid{grid-template-columns:1fr;grid-template-areas:"v" "m" "log"}.lbar{flex-wrap:nowrap}}
+.pane{background:var(--card);border-radius:14px;padding:14px;box-shadow:0 1px 4px var(--shadow);display:flex;flex-direction:column;gap:9px;min-width:0}
+.pane.vis{border-top:4px solid var(--blue)}.pane.mine{border-top:4px solid var(--ac)}
+.ph{display:flex;align-items:center;justify-content:space-between;gap:8px}.who{display:inline-flex;gap:7px;align-items:center;font-size:16px;font-weight:600}
+.badge{font-size:11px;padding:2px 9px;border-radius:10px;background:var(--soft);color:var(--mut);display:inline-flex;gap:4px;align-items:center}
+/* Lo que esta persona debe leer (traducido a su idioma) */
+.foryou{font-size:22px;line-height:1.32;border-radius:11px;padding:13px 14px;min-height:76px;max-height:190px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;transition:background .25s}
+.vis .foryou{background:var(--blue-tint)}.mine .foryou{background:var(--tint)}.foryou.empty{font-size:14px;color:var(--mut)}
+.foryou.flash{animation:flash .5s ease}@keyframes flash{0%{transform:scale(.99);opacity:.45}100%{transform:scale(1);opacity:1}}
+.oacts{display:flex;gap:6px;flex-wrap:wrap;margin-top:-3px}
+.oacts button{font-size:12px;padding:5px 10px;border-radius:13px;min-height:0}.oacts .ic{width:14px;height:14px}
+/* Campo de escritura que crece solo, con botón para limpiar */
+.field{position:relative;display:flex}
+.field textarea{resize:none;min-height:46px;max-height:150px;border-radius:14px;padding:12px 38px 12px 14px;line-height:1.35;overflow-y:hidden}
+.clr{position:absolute;right:7px;top:9px;width:27px;height:27px;padding:0;border-radius:14px;justify-content:center;background:var(--soft);color:var(--mut);border:0}
+.clr .ic{width:14px;height:14px}
+.row2{display:flex;gap:8px;align-items:flex-start}.row2 .field{flex:1;min-width:0}
+.mic,.sq{width:46px;height:46px;padding:0;border-radius:23px;justify-content:center;flex:none}.mic .ic,.sq .ic{width:20px;height:20px}
+.mic.rec{background:var(--bad);color:#fff;animation:pulse 1s infinite}@keyframes pulse{50%{opacity:.55}}
+/* Vista previa: se traduce mientras escribes, antes de enviar */
+.live{border-radius:11px;padding:9px 12px;background:var(--soft);font-size:16px;line-height:1.35;white-space:pre-wrap;overflow-wrap:anywhere;display:none;border:1px dashed var(--line)}
+.live.on{display:block}
+.live .lv{color:var(--mut);font-size:11px;display:flex;gap:5px;align-items:center;margin-bottom:3px;font-weight:600}
+.live .lt{opacity:1;transition:opacity .15s}.live.wait .lt{opacity:.5}
+.cnt{font-size:11px;color:var(--mut);font-variant-numeric:tabular-nums;text-align:right;margin-top:-5px}.cnt.max{color:var(--bad)}
+/* Frases rápidas: plegadas, para no empujar la conversación fuera de pantalla */
+.qd{border-top:1px solid var(--line);padding-top:4px;margin-top:auto}
+.qd>summary{font-size:13px;color:var(--mut);font-weight:600;padding:5px 0;list-style:none;display:flex;gap:6px;align-items:center}
+.qd>summary::-webkit-details-marker{display:none}
+.qd>summary .ic{transition:transform .2s}.qd[open]>summary .ic.car{transform:rotate(180deg)}
+.qd .q{grid-template-columns:repeat(auto-fill,minmax(128px,1fr));max-height:216px;overflow:auto;padding-right:2px}
+/* Pantalla completa: enseñar la traducción al visitante */
+#cvbig{max-width:none;width:100vw;height:100vh;max-height:100vh;border-radius:0;padding:0;background:var(--card)}
+#cvbig .bg{display:flex;flex-direction:column;height:100vh;padding:24px;gap:14px}
+#cvbig .bt{flex:1;display:flex;align-items:center;justify-content:center;text-align:center;font-size:clamp(28px,6vw,64px);line-height:1.25;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere}
+#cvbig .bb{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+/* ---- Mirar: identificar fotos en el propio equipo ---- */
+.mdl{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--line)}
+.mdl:last-child{border-bottom:0}.mdl .ic.big{width:22px;height:22px;margin-top:2px;color:var(--mut)}
+.mdl .txt{flex:1;min-width:0}.mdl b{font-size:15px}.mdl p{margin:2px 0 0;font-size:13px;color:var(--mut)}
+.mdl .peso{font-size:12px;color:var(--mut);white-space:nowrap}
+.bar{height:6px;border-radius:3px;background:var(--bar);overflow:hidden;margin-top:7px}
+.bar>i{display:block;height:100%;background:var(--ac);width:0;transition:width .25s}
+.mgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+@media (max-width:700px){.mgrid{grid-template-columns:1fr}}
+.mprev{background:var(--card);border-radius:12px;min-height:220px;display:flex;align-items:center;justify-content:center;
+  overflow:hidden;box-shadow:0 1px 4px var(--shadow);color:var(--mut);font-size:14px;padding:12px;text-align:center}
+.mprev img{max-width:100%;max-height:320px;border-radius:8px;display:block}
+.mres{background:var(--card);border-radius:12px;padding:14px;box-shadow:0 1px 4px var(--shadow);min-height:220px}
+.hit{margin-bottom:12px}.hit .l{display:flex;justify-content:space-between;gap:8px;font-size:15px;align-items:baseline}
+.hit.mejor .l{font-size:20px;font-weight:600}.hit .pc{color:var(--mut);font-size:13px;font-variant-numeric:tabular-nums}
+.hit .tr{font-size:14px;color:var(--mut);margin-top:2px}
+/* El historial va en fila y se desplaza de lado: ocupa poco alto y se ve la conversación
+   entera de un vistazo, en vez de una columna estrecha con todo el ancho desaprovechado. */
+.log{display:flex;gap:10px;overflow-x:auto;overflow-y:hidden;padding:4px 2px 10px;scroll-behavior:smooth}
+.bub{flex:0 0 auto;width:262px;display:flex;flex-direction:column;padding:10px 12px;border-radius:14px;
+  box-shadow:0 1px 3px var(--shadow);border-top:3px solid transparent}
+.bub.me{background:var(--tint);border-top-color:var(--ac)}.bub.them{background:var(--blue-tint);border-top-color:var(--blue)}
+.bub .o{font-size:14px;margin:2px 0;color:var(--mut);overflow-wrap:anywhere}
+.bub .t{font-size:18px;font-weight:600;margin:4px 0;overflow-wrap:anywhere}
+.bub .err{font-weight:400;font-size:14px;color:var(--bad)}
+.bub .via{display:flex;gap:4px;align-items:center;margin:2px 0 6px}
+.bub .bacts{display:flex;gap:6px;margin-top:auto;flex-wrap:wrap}
+.bub .bacts button{font-size:12px;padding:5px 9px;border-radius:12px;min-height:0}
+.bub .bacts .ic{width:14px;height:14px}
+.logw .lhint{font-size:12px;color:var(--mut);margin:0 0 2px}
+/* Detalle de una traducción, al estilo de un traductor: otras formas de decirlo,
+   qué significa cada palabra y cómo suena. */
+#cvdet{max-width:620px;width:94%}
+.det{padding:18px;display:flex;flex-direction:column;gap:14px}
+.det h3{margin:0;font-size:17px}
+.det .par{background:var(--soft);border-radius:11px;padding:11px 13px}
+.det .par small{display:block;margin-bottom:3px}
+.det .grande{font-size:21px;font-weight:600;line-height:1.3;overflow-wrap:anywhere}
+.det .son{font-size:14px;color:var(--mut);font-style:italic;margin-top:4px}
+.det ul{margin:4px 0 0;padding-left:20px}.det li{margin:3px 0}
+.det .pal{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:6px;margin-top:4px}
+.det .pal div{background:var(--soft);border-radius:9px;padding:6px 9px;font-size:14px}
+.det .pal b{font-weight:600}.det .pal span{color:var(--mut)}
+.det .cargando{color:var(--mut);font-size:14px}
+.cvempty{color:var(--mut);padding:16px;line-height:1.8;max-width:420px;margin:auto}.cvempty ol{margin:6px 0;padding-left:20px}
+.ic.flip{transform:scaleX(-1)}.ic.bad,.bad{color:var(--bad)}
+a.btn{display:inline-flex;align-items:center;gap:6px;text-decoration:none;border-radius:18px;padding:6px 12px;font-size:13px;border:1px solid var(--ac);color:var(--ac);background:var(--card)}
+.badge{background:var(--ac);color:var(--ac-fg);border-radius:10px;font-size:11px;font-weight:700;padding:1px 7px;line-height:16px}
+nav .badge{margin-left:2px}nav button:not(.alt) .badge{background:var(--ac-fg);color:var(--ac)}
+.wa{display:grid;grid-template-columns:330px 1fr;height:calc(100vh - 230px);min-height:460px;background:var(--card);border-radius:14px;overflow:hidden;box-shadow:0 1px 4px var(--shadow);margin-top:10px}
+.wa-list{border-right:1px solid var(--line);display:flex;flex-direction:column;min-height:0}
+.wa-lh{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;border-bottom:1px solid var(--line);font-size:17px}
+#walist{overflow:auto;flex:1}
+.wa-item{all:unset;box-sizing:border-box;display:flex;gap:10px;align-items:center;width:100%;padding:10px 12px;border-bottom:1px solid var(--line);cursor:pointer;color:var(--fg)}
+.wa-item:hover{background:var(--soft)}.wa-item.on{background:var(--tint)}
+.av{width:44px;height:44px;border-radius:50%;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:18px;flex:none}
+.wa-mid{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}.wa-row{display:flex;justify-content:space-between;gap:8px;align-items:center}
+.wa-row b{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.wa-row small{flex:none}
+.pr{color:var(--mut);font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:flex;gap:4px;align-items:center}.wa-tags{font-size:11px}
+.wa-none,.wa-empty{padding:30px 16px;text-align:center;color:var(--mut);display:flex;flex-direction:column;gap:6px;align-items:center}
+.wa-empty{margin:auto;max-width:320px}.wa-empty .ic,.wa-none .ic{width:44px;height:44px}
+.wa-th{display:flex;flex-direction:column;min-width:0;min-height:0;background:var(--wall)}
+.wa-hd{display:flex;gap:10px;align-items:center;padding:8px 12px;background:var(--card);border-bottom:1px solid var(--line)}.wa-hd .back{display:none}
+.wa-body{flex:1;overflow:auto;padding:14px 16px;display:flex;flex-direction:column;gap:6px}
+.mb{max-width:min(72%,560px);padding:7px 10px 5px;border-radius:10px;box-shadow:0 1px 1px var(--shadow);font-size:15px;line-height:1.35;white-space:pre-wrap;overflow-wrap:anywhere}
+.mb.in{align-self:flex-start;background:var(--card);border-top-left-radius:2px}.mb.out{align-self:flex-end;background:var(--outb);border-top-right-radius:2px}
+.mb.alert{border:2px solid var(--bad)}
+.mb .sub{font-size:13px;color:var(--mut);margin-top:4px;padding-top:4px;border-top:1px dashed var(--line)}
+.mb .tm{float:right;margin:6px 0 0 10px;font-size:11px;color:var(--mut);display:inline-flex;gap:3px;align-items:center}.mb .tm .ic{width:15px;height:15px}
+.wa-ft{background:var(--card);border-top:1px solid var(--line);padding:8px 10px;display:flex;flex-direction:column;gap:6px}
+.wa-q{display:flex;gap:6px;overflow-x:auto;padding-bottom:2px}.wa-q .chip{white-space:nowrap;flex:none;min-height:34px;padding:6px 12px;font-size:13px;border-radius:18px}
+.chip.sug{background:var(--ac);color:var(--ac-fg)}
+.wa-in{display:flex;gap:8px;align-items:flex-end}.wa-in textarea{resize:none;max-height:140px;border-radius:22px;line-height:1.3;padding:11px 16px}
+.sq{width:46px;height:46px;padding:0;border-radius:50%;justify-content:center;flex:none}.sq.sm{width:36px;height:36px}
+@media (max-width:760px){.wa{grid-template-columns:1fr;height:calc(100vh - 200px)}.wa .wa-th{display:none}.wa.open .wa-list{display:none}.wa.open .wa-th{display:flex}.wa-hd .back{display:inline-flex}.mb{max-width:85%}}
+.hero{position:relative;min-height:clamp(260px,46vh,440px);border-radius:16px;overflow:hidden;display:flex;align-items:flex-end;margin:4px 0 8px;
+  background:#3d4a3f url('/hero') center 38%/cover no-repeat}
+.hero::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,#0000 30%,#000a 100%)}
+:root[data-theme="dark"] .hero::before{background:linear-gradient(180deg,#0003 0%,#000c 100%)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .hero::before{background:linear-gradient(180deg,#0003 0%,#000c 100%)}}
+.hero-in{position:relative;padding:24px;color:#fff;max-width:620px}
+.hero h1{margin:0 0 8px;font-size:clamp(26px,4.5vw,40px);line-height:1.1;text-shadow:0 2px 12px #0008}
+.hero p{margin:0 0 16px;font-size:clamp(15px,2vw,17px);text-shadow:0 1px 8px #0009}
+.hero-acts{display:flex;flex-wrap:wrap;gap:8px}.hero button{font-size:16px;padding:11px 18px}
+.hero button.ghost{background:#fff2;color:#fff;border:1px solid #fffa;backdrop-filter:blur(4px)}
+@media (max-width:520px){header{flex-wrap:wrap}.sbox{flex-basis:100%}#rf{flex:1;justify-content:center}}
+</style></head><body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+ <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></symbol>
+ <symbol id="i-chev" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
+ <symbol id="i-camera" viewBox="0 0 24 24"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3z"/><circle cx="12" cy="13" r="3.5"/></symbol>
+ <symbol id="i-image" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></symbol>
+ <symbol id="i-chip" viewBox="0 0 24 24"><rect x="7" y="7" width="10" height="10" rx="1.5"/><path d="M10 2v3M14 2v3M10 19v3M14 19v3M2 10h3M2 14h3M19 10h3M19 14h3"/></symbol>
+ <symbol id="i-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></symbol>
+ <symbol id="i-expand" viewBox="0 0 24 24"><path d="M15 3h6v6"/><path d="M9 21H3v-6"/><path d="M21 3l-7 7"/><path d="M3 21l7-7"/></symbol>
+ <symbol id="i-compass" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m16.24 7.76-2.12 6.36-6.36 2.12 2.12-6.36z"/></symbol>
+ <symbol id="i-lang" viewBox="0 0 24 24"><path d="m5 8 6 6"/><path d="m4 14 6-6 2-3"/><path d="M2 5h12"/><path d="M7 2h1"/><path d="m22 22-5-10-5 10"/><path d="M14 18h6"/></symbol>
+ <symbol id="i-msg" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></symbol>
+ <symbol id="i-download" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/><path d="M12 15V3"/></symbol>
+ <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></symbol>
+ <symbol id="i-pin" viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></symbol>
+ <symbol id="i-locate" viewBox="0 0 24 24"><circle cx="12" cy="12" r="7"/><circle cx="12" cy="12" r="2.5"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></symbol>
+ <symbol id="i-trash" viewBox="0 0 24 24"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></symbol>
+ <symbol id="i-volume" viewBox="0 0 24 24"><path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></symbol>
+ <symbol id="i-mic" viewBox="0 0 24 24"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><path d="M12 19v3"/></symbol>
+ <symbol id="i-stop" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2"/></symbol>
+ <symbol id="i-send" viewBox="0 0 24 24"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></symbol>
+ <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
+ <symbol id="i-check2" viewBox="0 0 24 24"><path d="M18 6 7 17l-5-5"/><path d="m22 10-7.5 7.5L13 16"/></symbol>
+ <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></symbol>
+ <symbol id="i-pencil" viewBox="0 0 24 24"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></symbol>
+ <symbol id="i-inbox" viewBox="0 0 24 24"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></symbol>
+ <symbol id="i-sliders" viewBox="0 0 24 24"><path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M2 14h4M10 8h4M18 16h4"/></symbol>
+ <symbol id="i-star" viewBox="0 0 24 24"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z"/></symbol>
+ <symbol id="i-phone" viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></symbol>
+ <symbol id="i-money" viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2"/><path d="M6 12h.01M18 12h.01"/></symbol>
+ <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></symbol>
+ <symbol id="i-timer" viewBox="0 0 24 24"><path d="M5 22h14M5 2h14"/><path d="M17 22v-4.17a2 2 0 0 0-.59-1.42L12 12l-4.41 4.41A2 2 0 0 0 7 17.83V22"/><path d="M7 2v4.17a2 2 0 0 0 .59 1.42L12 12l4.41-4.41A2 2 0 0 0 17 6.17V2"/></symbol>
+ <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></symbol>
+ <symbol id="i-gift" viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13"/><path d="M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7"/><path d="M7.5 8a2.5 2.5 0 0 1 0-5C11 3 12 8 12 8s1-5 4.5-5a2.5 2.5 0 0 1 0 5"/></symbol>
+ <symbol id="i-card" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></symbol>
+ <symbol id="i-alert" viewBox="0 0 24 24"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4M12 17h.01"/></symbol>
+ <symbol id="i-up" viewBox="0 0 24 24"><path d="M7 10v12"/><path d="M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2a3.13 3.13 0 0 1 3 3.88Z"/></symbol>
+ <symbol id="i-down" viewBox="0 0 24 24"><g transform="rotate(180 12 12)"><path d="M7 10v12"/><path d="M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2a3.13 3.13 0 0 1 3 3.88Z"/></g></symbol>
+ <symbol id="i-book" viewBox="0 0 24 24"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></symbol>
+ <symbol id="i-laptop" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M2 20h20"/></symbol>
+ <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></symbol>
+ <symbol id="i-smile" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2M9 9h.01M15 9h.01"/></symbol>
+ <symbol id="i-help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/><path d="m4.93 4.93 4.24 4.24M14.83 14.83l4.24 4.24M14.83 9.17l4.24-4.24M4.93 19.07l4.24-4.24"/></symbol>
+ <symbol id="i-wc" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><text x="12" y="15.6" font-size="8" text-anchor="middle" fill="currentColor" stroke="none" font-family="system-ui,sans-serif" font-weight="700">WC</text></symbol>
+ <symbol id="i-heart" viewBox="0 0 24 24"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></symbol>
+ <symbol id="i-repeat" viewBox="0 0 24 24"><path d="m17 2 4 4-4 4"/><path d="M3 11v-1a4 4 0 0 1 4-4h14"/><path d="m7 22-4-4 4-4"/><path d="M21 13v1a4 4 0 0 1-4 4H3"/></symbol>
+ <symbol id="i-walk" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></symbol>
+ <symbol id="i-pause" viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></symbol>
+ <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></symbol>
+ <symbol id="i-moon" viewBox="0 0 24 24"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></symbol>
+ <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v1"/></symbol>
+ <symbol id="i-wifi" viewBox="0 0 24 24"><path d="M2 8.82a15 15 0 0 1 20 0"/><path d="M5 12.86a10 10 0 0 1 14 0"/><path d="M8.5 16.43a5 5 0 0 1 7 0"/><path d="M12 20h.01"/></symbol>
+ <symbol id="i-wifioff" viewBox="0 0 24 24"><path d="M12 20h.01"/><path d="M8.5 16.43a5 5 0 0 1 7 0"/><path d="M5 12.86a10 10 0 0 1 5.17-2.69"/><path d="M2 8.82a15 15 0 0 1 4.18-2.65"/><path d="M2 2l20 20"/></symbol>
+ <symbol id="i-list" viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></symbol>
+ <symbol id="i-mail" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></symbol>
+</svg>
+<header>
+ <div class="sbox"><svg class="ic"><use href="#i-search"/></svg><input id="q" type="search" placeholder="Buscar: museo, mirador, cascada…" aria-label="Buscar lugares"></div>
+ <button class="alt" id="rf" title="Guarda los lugares de tu zona en este equipo para usarlos sin internet"><svg class="ic"><use href="#i-download"/></svg><span class="rfl">Descargar</span></button>
+ <select id="uilang" class="uilang" aria-label="Idioma de la app" title="Idioma de la app"></select>
+ <button class="alt icon" id="theme" title="Modo oscuro / claro" aria-label="Cambiar modo oscuro o claro"></button>
+</header>
+<nav><button id="t1"><svg class="ic"><use href="#i-compass"/></svg>Explorar</button><button class="alt" id="t3"><svg class="ic"><use href="#i-lang"/></svg>Conversar</button><button class="alt" id="t4"><svg class="ic"><use href="#i-camera"/></svg>Mirar</button><button class="alt" id="t2"><svg class="ic"><use href="#i-msg"/></svg>Mensajes</button></nav>
+<main>
+<section id="p1">
+<div class="hero" id="hero">
+ <div class="hero-in">
+  <h1>Descubre el campo de tu región</h1>
+  <p>Museos, miradores, cascadas y sitios históricos de tu zona. Habla con visitantes de cualquier idioma, incluso sin internet.</p>
+  <div class="hero-acts"><button id="hgo"><svg class="ic"><use href="#i-compass"/></svg>Ver lugares</button>
+   <button class="ghost" id="hcv"><svg class="ic"><use href="#i-lang"/></svg>Conversar con un visitante</button></div>
+ </div>
+</div>
+<details><summary><svg class="ic"><use href="#i-pin"/></svg>Cambiar zona</summary><div class="box">
+  <button id="geo"><svg class="ic"><use href="#i-locate"/></svg>Usar mi ubicación</button>
+  <p><input id="zq" placeholder="O busca una localidad (ej. Valle de Bravo)"></p>
+  <p><button id="zb" class="alt">Buscar</button> <label style="display:inline">Radio:
+   <select id="zr"><option value="5000">5 km</option><option value="15000" selected>15 km</option><option value="30000">30 km</option></select></label></p>
+  <div id="zres"></div></div></details>
+<h2 id="cath">Todos los lugares</h2><div class="row" id="cat"></div></section>
+<section id="p3" class="hide">
+ <div class="top"><h2>Conversar</h2>
+  <div class="tools"><label class="tg"><input type="checkbox" id="cvauto" checked><svg class="ic"><use href="#i-volume"/></svg>Voz alta</label>
+   <label class="tg" title="Usa el reconocedor de voz guardado en este equipo en vez del del navegador, que necesita internet"><input type="checkbox" id="cvoff"><svg class="ic"><use href="#i-chip"/></svg>Micrófono sin internet</label>
+   <button class="alt sm" id="cvclear"><svg class="ic"><use href="#i-trash"/></svg>Borrar</button></div></div>
+ <div id="cvnet" class="net"></div>
+ <!-- El orden coincide con el de los paneles de abajo: visitante a la izquierda, tú a la derecha. -->
+ <div class="lbar">
+  <div class="lsel v"><small><svg class="ic"><use href="#i-user"/></svg>Visitante</small><select id="cvlang" aria-label="Idioma del visitante"></select></div>
+  <button id="cvswap" class="swap" title="Intercambiar los dos idiomas" aria-label="Intercambiar los dos idiomas"><svg class="ic"><use href="#i-repeat"/></svg></button>
+  <div class="lsel m"><small><svg class="ic"><use href="#i-user"/></svg>Tú</small><select id="cvmine" aria-label="Tu idioma"></select></div>
+ </div>
+ <div class="cvgrid">
+  <div id="cvv" class="pane vis">
+   <div class="ph"><span class="who"><svg class="ic"><use href="#i-user"/></svg><b id="cvvwho"></b></span><span class="badge" id="cvvtag"></span></div>
+   <div id="cvforyou" class="foryou" dir="auto" data-raw></div>
+   <div class="oacts" id="cvvacts" hidden>
+    <button class="alt" data-say="them"><svg class="ic"><use href="#i-volume"/></svg><span id="cvvsay"></span></button>
+    <button class="alt" data-copy="them"><svg class="ic"><use href="#i-copy"/></svg>Copiar</button>
+    <button class="alt" data-big="them"><svg class="ic"><use href="#i-expand"/></svg>Pantalla completa</button></div>
+   <div class="row2">
+    <div class="field"><textarea id="cvvin" rows="1" dir="auto" maxlength="500"></textarea><button class="clr" id="cvvclr" hidden aria-label="Borrar"><svg class="ic"><use href="#i-x"/></svg></button></div>
+    <button id="cvvmic" class="mic" title="Hablar" aria-label="Hablar"></button><button id="cvvsend" class="sq" title="Enviar" aria-label="Enviar"><svg class="ic"><use href="#i-send"/></svg></button></div>
+   <div class="cnt" id="cvvcnt" hidden></div>
+   <div class="live" id="cvvlive"></div>
+   <details class="qd" id="cvvqd"><summary><svg class="ic car"><use href="#i-chev"/></svg><span id="cvvquick"></span></summary><div class="q" id="cvvq"></div></details>
+  </div>
+  <div class="pane mine" id="cvm">
+   <div class="ph"><span class="who"><svg class="ic"><use href="#i-user"/></svg>Tú</span><span class="badge" id="cvmtag"></span></div>
+   <div id="cvforme" class="foryou" dir="auto" data-raw></div>
+   <div class="oacts" id="cvmacts" hidden>
+    <button class="alt" data-say="me"><svg class="ic"><use href="#i-volume"/></svg><span id="cvmsay"></span></button>
+    <button class="alt" data-copy="me"><svg class="ic"><use href="#i-copy"/></svg>Copiar</button></div>
+   <div class="row2">
+    <div class="field"><textarea id="cvmin" rows="1" dir="auto" maxlength="500"></textarea><button class="clr" id="cvmclr" hidden aria-label="Borrar"><svg class="ic"><use href="#i-x"/></svg></button></div>
+    <button id="cvmmic" class="mic" title="Hablar" aria-label="Hablar"></button><button id="cvmsend" class="sq" title="Enviar" aria-label="Enviar"><svg class="ic"><use href="#i-send"/></svg></button></div>
+   <div class="cnt" id="cvmcnt" hidden></div>
+   <div class="live" id="cvmlive"></div>
+   <details class="qd"><summary><svg class="ic car"><use href="#i-chev"/></svg>Palabras rápidas (funcionan sin internet)</summary><div class="q" id="cvmq"></div></details>
+  </div>
+  <div class="logw"><p id="cvmsg" class="warn" hidden></p>
+   <p class="lhint" id="cvlhint" hidden>Lo dicho hasta ahora, de izquierda a derecha. Desliza para ver lo anterior.</p>
+   <div id="cvlog" class="log"></div></div>
+ </div>
+</section>
+<section id="p4" class="hide">
+ <div class="top"><h2>Mirar</h2></div>
+ <p class="guide">Toma una foto y el equipo te dice qué hay en ella. Funciona sin internet: el modelo se descarga
+  una vez y se queda guardado. Nada sale de aquí, la foto no se envía a ningún lado.</p>
+ <div id="mdlbox" class="box"></div>
+ <div id="mirarui">
+  <div class="acts">
+   <button id="mfoto"><svg class="ic"><use href="#i-camera"/></svg>Tomar foto</button>
+   <button class="alt" id="marchivo"><svg class="ic"><use href="#i-image"/></svg>Elegir imagen</button>
+  </div>
+  <input type="file" id="mfile" accept="image/*" hidden><input type="file" id="mcam" accept="image/*" capture="environment" hidden>
+  <label>¿Qué estás mirando? Si lo acotas, acierta más.</label>
+  <div class="q" id="mgrupos"></div>
+  <div class="mgrid">
+   <div id="mprev" class="mprev empty">La foto aparecerá aquí.</div>
+   <div id="mres" class="mres"></div>
+  </div>
+ </div>
+</section>
+<dialog id="cvdet"><div class="det" id="cvdetc"></div></dialog>
+<dialog id="cvbig"><div class="bg">
+ <div class="bt" id="cvbigt" dir="auto"></div>
+ <div class="bb"><button class="alt big" id="cvbigsay"><svg class="ic"><use href="#i-volume"/></svg>Escuchar</button>
+  <button class="big" id="cvbigx"><svg class="ic"><use href="#i-x"/></svg>Cerrar</button></div>
+</div></dialog>
+<section id="p2" class="hide">
+ <div class="top"><h2>Mensajes</h2><a class="btn alt sm" href="chat.html" target="_blank" rel="noopener"><svg class="ic"><use href="#i-phone"/></svg>Abrir chat de visitante</a></div>
+ <div id="share" class="net"></div>
+ <details><summary><svg class="ic"><use href="#i-sliders"/></svg>Mis datos (precio, horario, teléfono…): se usan en las respuestas rápidas</summary><div class="box" id="opf"></div></details>
+ <div class="wa" id="wa">
+  <aside class="wa-list"><div class="wa-lh"><b>Chats</b><button class="alt sq sm" id="wasync" title="Ver si hay nuevos (Telegram)" aria-label="Ver si hay nuevos"><svg class="ic"><use href="#i-refresh"/></svg></button></div><div id="walist"></div></aside>
+  <div class="wa-th" id="wath"></div>
+ </div>
+</section>
+<p><small id="src"></small><br><small id="net"></small></p>
+</main>
+<dialog id="rv"><div id="rvbody"></div><form method="dialog"><button class="alt">Cerrar</button></form></dialog>
+<script>
+if(location.protocol==='file:'){document.body.innerHTML='<div style="padding:20px;font-size:18px"><h2>Así no se abre la app</h2><p>En una terminal, dentro de la carpeta del proyecto, escribe:</p><pre>.venv\\Scripts\\python -m src.main</pre><p>Luego entra a <b>http://127.0.0.1:8000</b></p></div>';throw new Error('abrir con el servidor')}
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+// La app puede estar en la raíz (servidor local) o dentro de una carpeta (una demo en
+// un hosting). U() convierte las rutas internas en rutas que funcionan en ambos sitios.
+const BASE=location.pathname.replace(/[^/]*$/,'');
+const U=p=>BASE+String(p).replace(/^\//,'');
+// Íconos SVG (definidos arriba con <symbol>); toman el color del texto, así funcionan en modo claro y oscuro.
+// El nombre se limpia porque algunos vienen de archivos editables (data/vision_labels.json).
+const ic=(n,c='')=>n?`<svg class="ic ${c}" aria-hidden="true"><use href="#i-${String(n).replace(/[^a-z0-9]/gi,'')}"/></svg>`:'';
+const stars=n=>Array.from({length:5},(_,i)=>ic('star',i<n?'fill star':'star')).join('');
+// ---------- Idioma de la app ----------
+// El texto de la app está escrito en español; data/ui.json trae las traducciones, usando el
+// propio texto español como clave. Se muestra el idioma del navegador si está traducido y,
+// si no, inglés. T() devuelve el español cuando no hay traducción, así nunca queda hueco.
+let UI={},IDIOMA='es';
+const plano=s=>String(s).replace(/\s+/g,' ').trim();
+const T=s=>{const v=UI[plano(s)];return v===undefined?s:v};
+// Conserva los espacios y saltos de línea de alrededor: en el HTML el texto viene sangrado.
+const Tnodo=s=>{const m=s.match(/^(\s*)([\s\S]*?)(\s*)$/),v=UI[plano(m[2])];
+  return v===undefined?s:m[1]+v+m[3]};
+const ATR=['title','placeholder','aria-label'];
+/** Traduce lo que ya está en pantalla. Se salta lo marcado con data-raw: ahí va texto de
+ *  las personas (mensajes, reseñas, nombres de lugares) que no se debe tocar nunca. */
+function traducirDOM(raiz){
+  if(IDIOMA==='es'||!raiz)return;
+  const w=document.createTreeWalker(raiz,NodeFilter.SHOW_TEXT,{acceptNode(n){
+    if(!n.textContent.trim())return NodeFilter.FILTER_REJECT;
+    const p=n.parentElement;
+    return p&&!p.closest('[data-raw],script,style,svg')?NodeFilter.FILTER_ACCEPT:NodeFilter.FILTER_REJECT}});
+  const nodos=[];for(let n;(n=w.nextNode());)nodos.push(n);
+  for(const n of nodos){const t=Tnodo(n.textContent);if(t!==n.textContent)n.textContent=t}
+  for(const el of raiz.querySelectorAll('['+ATR.join('],[')+']')){
+    if(el.closest('[data-raw]'))continue;
+    for(const a of ATR){const v=el.getAttribute(a);if(v==null)continue;
+      const t=UI[plano(v)];if(t!==undefined&&t!==v)el.setAttribute(a,t)}
+  }
+}
+function escogerIdioma(dispo){
+  try{const g=localStorage.getItem('uiLang');if(g&&dispo.includes(g))return g}catch{}
+  for(const l of (navigator.languages&&navigator.languages.length?navigator.languages:[navigator.language||''])){
+    const c=String(l).toLowerCase().split('-')[0];
+    if(dispo.includes(c))return c;
+  }
+  return 'en';   // si el idioma del navegador no está traducido, inglés
+}
+async function initUI(){
+  const d=(await api('/api/ui'))||{};
+  const nombres=d.idiomas||{es:T('Español')},dispo=Object.keys(nombres);
+  IDIOMA=escogerIdioma(dispo);
+  UI={};for(const k in (d[IDIOMA]||{}))UI[plano(k)]=d[IDIOMA][k];
+  document.documentElement.lang=IDIOMA;
+  $('#uilang').innerHTML=dispo.map(l=>`<option value="${l}"${l===IDIOMA?' selected':''}>${esc(nombres[l])}</option>`).join('');
+  traducirMapas();
+  traducirDOM(document.body);
+  // Quien usa el panel en inglés habla inglés, salvo que ya haya elegido otra cosa.
+  // Si no, el marcador quedaba mezclado ("Escribe en Spanish…") y las frases rápidas en español.
+  let guardado=null;try{guardado=localStorage.getItem('convMine')}catch{}
+  if(!guardado&&IDIOMA!=='es'){ML=IDIOMA;if(VL===ML)VL=ML==='es'?'en':'es'}
+}
+// Estas tablas se crean al cargar el archivo, antes de saber el idioma, así que se traducen
+// de una vez aquí en lugar de envolver cada uso.
+function traducirMapas(){
+  if(IDIOMA==='es')return;
+  for(const m of [LN,LS,CHN])for(const k in m)m[k]=T(m[k]);
+  for(const m of [VIA,LVIA,ETQ])for(const k in m)m[k]=Array.isArray(m[k])?[m[k][0],T(m[k][1])]:T(m[k]);
+  for(const f of OF)f[2]=T(f[2]);
+}
+$('#uilang').onchange=e=>{try{localStorage.setItem('uiLang',e.target.value)}catch{};location.reload()};
+// ---------- Modo oscuro ----------
+const darkNow=()=>{const t=document.documentElement.dataset.theme;return t?t==='dark':matchMedia('(prefers-color-scheme: dark)').matches};
+const themeBtn=()=>{$('#theme').innerHTML=ic(darkNow()?'sun':'moon');$('#theme').title=T(darkNow()?T('Cambiar a modo claro'):T('Cambiar a modo oscuro'))};
+$('#theme').onclick=()=>{const t=darkNow()?'light':'dark';document.documentElement.dataset.theme=t;try{localStorage.setItem('theme',t)}catch{};themeBtn()};
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change',themeBtn);themeBtn();
+async function api(path,opt){
+  try{const r=await fetch(U(path),opt);if(!r.ok)throw 0;const d=await r.json();
+      if(!opt)try{localStorage.setItem(path,JSON.stringify(d))}catch{};$('#net').textContent='';return d}
+  catch{let c=null;try{c=!opt&&localStorage.getItem(path)}catch{};$('#net').textContent=T('Sin conexión: mostrando datos guardados.');return c?JSON.parse(c):null}}
+const card=p=>`<div class="card">
+ <h3 data-raw>${esc(p.name)}</h3><p data-raw>${esc(p.desc)}</p>
+ ${p.rating!=null?`<div class="meta">${ic('star','fill star')} ${(+p.rating).toFixed(1)}${p.n_reviews?' ('+p.n_reviews+')':''}</div>`:''}
+ <button class="alt sm" data-rv="${esc(p.id)}">${ic('star')}Reseñas</button></div>`;
+async function load(){
+  const q=$('#q').value.trim(),ps=((await api('/api/places?q='+encodeURIComponent(q)))||[]).filter(p=>p.source!=='ejemplo');  // solo lugares reales (API)
+  $('#hero').hidden=!!q;
+  $('#cath').textContent=q?(ps.length?`${ps.length} resultado${ps.length>1?'s':''} para "${q}"`:`No encontré "${q}"`):T('Todos los lugares');
+  $('#cat').innerHTML=ps.map(card).join('')||(q?`<div class="box">Prueba con otra palabra: <div class="q">${['museo','mirador','cascada','monumento','cerro','historia']
+    .map(w=>`<button class="alt chip" data-sq="${w}">${w}</button>`).join('')}</div></div>`
+    :`<small>${T('Aún no hay lugares. Pulsa "Descargar" con internet para guardar los de tu zona y usarlos sin conexión.')}</small>`);
+  const a=await api('/api/area');
+  $('#src').textContent=a?`${T('Zona:')} ${a.name} (${a.radius_km} km) · ${a.count} ${T('lugares guardados para usar sin internet')}${a.updated?` (${T('descargados el')} ${a.updated})`:''} · Datos © colaboradores de OpenStreetMap`:'';
+  if(a)$('#rf').title=a.updated?`${T('Guardado sin internet:')} ${a.count} ${T('lugares de')} ${a.name} (${a.updated}). ${T('Toca para volver a descargar.')}`:T('Guarda los lugares de tu zona en este equipo para usarlos sin internet');
+}
+$('#hgo').onclick=()=>$('#cath').scrollIntoView({behavior:'smooth'});$('#hcv').onclick=()=>tab(3);
+let tm;$('#q').oninput=()=>{tab(1);clearTimeout(tm);tm=setTimeout(load,300)};
+$('#cat').addEventListener('click',e=>{const w=e.target.closest('button')?.dataset.sq;if(w){$('#q').value=w;load()}});
+function tab(n){[1,2,3,4].forEach(i=>{$('#p'+i).classList.toggle('hide',n!=i);$('#t'+i).className=n==i?'':'alt'})}
+$('#t1').onclick=()=>tab(1);$('#t2').onclick=()=>tab(2);$('#t3').onclick=()=>tab(3);
+const LN={es:'Español',en:'English (inglés)',fr:'Français (francés)',pt:'Português (portugués)',de:'Deutsch (alemán)',it:'Italiano',
+  zh:T('中文 (chino)'),ja:T('日本語 (japonés)'),ko:T('한국어 (coreano)'),ar:T('العربية (árabe)'),ru:T('Русский (ruso)'),hi:T('हिन्दी (hindi)'),
+  nl:T('Nederlands (neerlandés)'),tr:T('Türkçe (turco)'),pl:T('Polski (polaco)'),th:T('ไทย (tailandés)'),el:T('Ελληνικά (griego)'),he:T('עברית (hebreo)')};
+const LS={en:'inglés',fr:'francés',pt:'portugués',de:'alemán',it:'italiano',zh:'chino',ja:'japonés',ko:'coreano',ar:'árabe',ru:'ruso',hi:'hindi',
+  nl:T('neerlandés'),tr:T('turco'),pl:T('polaco'),th:T('tailandés'),el:T('griego'),he:T('hebreo'),es:T('español')};
+const BCP={es:'es-MX',en:'en-US',fr:'fr-FR',pt:'pt-BR',de:'de-DE',it:'it-IT',zh:'zh-CN',ja:'ja-JP',ko:'ko-KR',ar:'ar-SA',ru:'ru-RU',hi:'hi-IN',
+  nl:'nl-NL',tr:'tr-TR',pl:'pl-PL',th:'th-TH',el:'el-GR',he:'he-IL'};
+const post=(u,b)=>api(u,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(b||{})});
+const tpl={};let LANGS=[];
+const ls=l=>LS[l]||l;
+async function getTpl(l){const d=await api('/api/templates?lang='+encodeURIComponent(l));if(d&&d.length)tpl[l]=d;return tpl[l]||[]}
+// Traductor del propio navegador (Chrome reciente): funciona sin internet una vez descargado el idioma.
+// Con límite de tiempo: si el navegador tarda (p. ej. descargando el idioma), se sigue sin él y el servidor traduce después.
+const trs={};
+const localTr=(text,src,dst,ask)=>Promise.race([_localTr(text,src,dst,ask),new Promise(r=>setTimeout(()=>r(null),ask?4000:1500))]);
+async function _localTr(text,src,dst,ask){
+  try{if(!text||src===dst||!('Translator' in self))return null;const k=src+'>'+dst;
+    if(!trs[k]){const a=await Translator.availability({sourceLanguage:src,targetLanguage:dst});
+      if(a==='unavailable'||(a!=='available'&&!ask))return null;
+      trs[k]=await Translator.create({sourceLanguage:src,targetLanguage:dst})}
+    return await trs[k].translate(text)}catch{return null}}
+const voiceFor=l=>'speechSynthesis' in window&&speechSynthesis.getVoices().some(v=>v.lang.toLowerCase().startsWith(l));
+function say(t,l){if(!voiceFor(l)||!t)return;speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang=BCP[l]||l;speechSynthesis.speak(u)}
+const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+const tplOf=i=>(tpl.es||[]).find(x=>x.intent===i);
+const labelOf=i=>{const t=tplOf(i);return t?ic(t.icon)+esc(t.label):esc(i)};
+const langOpts=sel=>Object.keys(sel?{[sel]:1,...LN}:LN).map(l=>`<option value="${esc(l)}"${l===sel?' selected':''}>${esc(LN[l]||l)}</option>`).join('');
+// ---------- Mensajes: chat estilo WhatsApp ----------
+// Los visitantes escriben desde /chat en su teléfono (misma wifi) o por Telegram; tú respondes aquí en español.
+const CHN={web:'Chat web',telegram:'Telegram',manual:'Prueba',webhook:'SMS / WhatsApp'};
+const AVC=['#2f6f4f','#3b6fb6','#a55a2a','#7a4fa0','#b03a5b','#2a8a8a'];
+let CHATS=[],CUR=null,ROWS=[],SIG='',READY=new Map();
+const sameChat=(a,b)=>a&&b&&a.channel===b.channel&&a.chat_id===b.chat_id;
+const chatName=c=>c.name||'Visitante '+String(c.chat_id).slice(-4).toUpperCase();
+const avatar=c=>{const n=chatName(c),h=[...String(c.chat_id)].reduce((a,ch)=>a+ch.charCodeAt(0),0);
+  return `<div class="av" style="background:${AVC[h%AVC.length]}">${esc(n.trim()[0].toUpperCase())}</div>`};
+const hhmm=at=>{if(!at)return '';const d=new Date(at.replace(' ','T')+'Z'),t=new Date();
+  return d.toDateString()===t.toDateString()?d.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}):d.toLocaleDateString([],{day:'numeric',month:'short'})};
+async function loadShare(){const s=await api('/api/share'),on=navigator.onLine,b=$('#share');
+  b.className='net '+(s&&s.lan?'on':'off');
+  b.innerHTML=s&&s.lan?ic('phone')+`<span>${T('Los visitantes te escriben desde su teléfono (conectados a la misma wifi) abriendo')} <b>${esc(s.url)}</b>. ${on?T('Con internet se traduce todo.'):T('Sin internet: usa las respuestas rápidas, ya están en su idioma.')}</span><button class="alt sm" id="copy">${T('Copiar')}</button>`
+    :ic('phone')+`<span>${T('Por ahora el chat solo se abre en este equipo. Para que los visitantes te escriban desde su teléfono, agrega ')}<b>HOST=0.0.0.0</b>${T(' en el archivo ')}<b>.env</b>${T(' y reinicia la app.')}</span>`;
+  const c=$('#copy');if(c)c.onclick=()=>{navigator.clipboard?.writeText(s.url);c.textContent=T('Copiado')}}
+function renderList(){
+  const n=CHATS.reduce((a,c)=>a+c.pending,0);$('#t2').innerHTML=ic('msg')+T('Mensajes')+(n?` <span class="badge">${n}</span>`:'');
+  $('#walist').innerHTML=CHATS.map((c,i)=>`<button class="wa-item${sameChat(c,CUR)?' on':''}" data-c="${i}">${avatar(c)}
+    <span class="wa-mid"><span class="wa-row"><b>${esc(chatName(c))}</b><small>${hhmm(c.at)}</small></span>
+    <span class="wa-row"><span class="pr">${c.alert?ic('alert','bad'):''}${c.from==='me'?ic('check'):''}${esc(c.preview||'')}</span>${c.pending?`<span class="badge">${c.pending}</span>`:''}</span>
+    <small class="wa-tags">${esc(LN[c.lang]||c.lang||'')} · ${esc(CHN[c.channel]||c.channel)}</small></span></button>`).join('')
+    ||`<div class="wa-none">${ic('inbox')}<b>Aún no hay chats.</b><br><small>${T('Cuando un visitante te escriba aparecerá aquí. Para probar, toca "Abrir chat de visitante".')}</small></div>`;
+}
+async function loadChats(){CHATS=(await api('/api/chats'))||[];renderList();if(CUR)await loadThread()}
+const curLang=()=>{const r=[...ROWS].reverse().find(x=>x.original_text);return (r&&r.lang)||(CUR&&CUR.lang)||'es'};
+function bubble(r){
+  const lang=r.lang||'es',out=[];
+  if(r.original_text){const al=r.intent==='alerta';
+    const ints=(r.intent||'').split(',').filter(i=>i&&i!=='alerta'&&tplOf(i));
+    out.push(`<div class="mb in${al?' alert':''}"><div dir="auto" data-raw>${esc(r.original_text)}</div>
+      ${lang!=='es'?(r.translated_text?`<div class="sub">${esc(r.translated_text)}</div>`:`<div class="sub" data-ltr="${r.id}">(La traducción llega cuando haya internet)</div>`):''}
+      ${al?`<div class="sub bad">${ic('alert')} Parece una queja o emergencia: respóndele con calma o llámale.</div>`:ints.length?`<div class="sub">${ints.map(labelOf).join(' · ')}</div>`:''}
+      <span class="tm">${hhmm(r.created_at)}</span></div>`)}
+  if(r.final_response){const mine=r.host_text||r.final_response;
+    out.push(`<div class="mb out"><div dir="auto" data-raw>${esc(mine)}</div>
+      ${r.final_is_es&&lang!=='es'?`<div class="sub">Se traducirá al ${esc(ls(lang))} cuando haya internet</div>`:mine!==r.final_response?`<div class="sub" dir="auto">${esc(r.final_response)}</div>`:''}
+      <span class="tm">${hhmm(r.created_at)}${r.status==='synced'?ic('check2'):ic('clock')}</span></div>`)}
+  return out.join('');
+}
+function renderThread(){
+  if(!CUR){$('#wath').innerHTML=`<div class="wa-empty">${ic('msg')}<b>${T('Elige un chat')}</b><small>${T('Las respuestas rápidas ya están escritas en el idioma de cada visitante.')}</small></div>`;return}
+  const lang=curLang(),c=CHATS.find(x=>sameChat(x,CUR))||CUR;
+  if(!$('#wabody')){$('#wath').innerHTML=`<div class="wa-hd" id="wahd"></div><div class="wa-body" id="wabody"></div>
+    <div class="wa-ft"><div class="wa-q" id="waq"></div><div class="wa-in"><textarea id="wain" rows="1" placeholder=T("Escribe en español…")></textarea>
+    ${SR?`<button class="sq alt" id="wamic" title="Dictar" aria-label="Dictar">${ic('mic')}</button>`:''}<button class="sq" id="wasend" title=T("Enviar") aria-label=T("Enviar")>${ic('send')}</button></div><small id="wapv" class="pv"></small></div>`}
+  $('#wahd').innerHTML=`<button class="alt sq back" id="waback" aria-label="Volver">${ic('walk','flip')}</button>${avatar(c)}<div><b>${esc(chatName(c))}</b><br><small>${esc(LN[lang]||lang)} · ${esc(CHN[c.channel]||c.channel)}</small></div>`;
+  const b=$('#wabody'),end=b.scrollHeight-b.scrollTop-b.clientHeight<80;
+  b.innerHTML=ROWS.map(bubble).join('')||'<div class="wa-empty"><small>Sin mensajes</small></div>';if(end||!b.dataset.k||b.dataset.k!==CUR.chat_id){b.scrollTop=b.scrollHeight;b.dataset.k=CUR.chat_id}
+  b.querySelectorAll('[data-ltr]').forEach(async e=>{const r=ROWS.find(x=>x.id==e.dataset.ltr),x=r&&await localTr(r.original_text,r.lang,'es');if(x)e.textContent=x});
+  // respuestas rápidas en el idioma del visitante; la sugerida (si la hay) primero
+  READY=new Map();(tpl[lang]||[]).forEach(t=>{if(t.lang_ok||lang==='es')READY.set(t.text.trim(),(tplOf(t.intent)||t).text)});
+  const pend=[...ROWS].reverse().find(r=>r.original_text&&r.status==='pending'&&r.proposed_response);
+  if(pend&&(lang==='es'||LANGS.includes(lang)))READY.set(pend.proposed_response.trim(),pend.proposed_response);
+  $('#waq').innerHTML=(pend?`<button class="chip sug" data-sug="1">${ic('star')}Sugerencia</button>`:'')
+    +(tpl[lang]||tpl.es||[]).map(t=>`<button class="alt chip" data-tq="${esc(t.intent)}">${ic(t.icon)}${esc(t.intent==='seguimiento'?T('Pedir reseña'):t.label)}</button>`).join('');
+  $('#waq').dataset.sug=pend?pend.proposed_response:'';pv();
+}
+async function loadThread(){if(!CUR)return;const rows=(await api(`/api/chats/thread?channel=${encodeURIComponent(CUR.channel)}&chat_id=${encodeURIComponent(CUR.chat_id)}`))||[];
+  const sig=rows.map(r=>r.id+r.status+(r.translated_text?1:0)).join();if(sig===SIG&&$('#wabody'))return;SIG=sig;ROWS=rows;await getTpl(curLang());renderThread()}
+async function openChat(c){CUR={channel:c.channel,chat_id:c.chat_id,lang:c.lang,name:c.name};SIG='';$('#wath').innerHTML='';$('#wa').classList.add('open');renderList();await loadThread();$('#wain')?.focus()}
+async function pv(){const e=$('#wapv'),t=($('#wain')?.value||'').trim(),lang=curLang();if(!e)return;
+  if(!t||lang==='es'){e.textContent='';return}
+  if(READY.has(t)){e.innerHTML=ic('check')+' Ya está en '+esc(ls(lang))+'.';return}
+  const x=await localTr(t,'es',lang);
+  e.innerHTML=ic('globe')+(x?` Se enviará en ${esc(ls(lang))}: <span dir="auto">${esc(x)}</span>`:` Escribe en español: se traduce al ${esc(ls(lang))} al enviar${navigator.onLine?'':' (cuando vuelva internet)'}.`)}
+async function sendHost(){
+  const ta=$('#wain'),text=ta.value.trim(),lang=curLang();if(!text||!CUR)return;
+  let body={channel:CUR.channel,chat_id:CUR.chat_id,text,host_text:text,in_spanish:false};
+  if(lang!=='es'){if(READY.has(text))body.host_text=READY.get(text);
+    else{const x=await localTr(text,'es',lang,true);if(x)body.text=x;else body.in_spanish=true}}
+  ta.value='';ta.style.height='';$('#wasend').disabled=true;await post('/api/chats/send',body);$('#wasend').disabled=false;SIG='';await loadChats();ta.focus()}
+$('#walist').onclick=e=>{const b=e.target.closest('[data-c]');if(b)openChat(CHATS[b.dataset.c])};
+$('#wath').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
+  if(b.id==='wasend')sendHost();
+  else if(b.id==='waback'){$('#wa').classList.remove('open');CUR=null;renderList()}
+  else if(b.dataset.sug){$('#wain').value=$('#waq').dataset.sug;pv()}
+  else if(b.dataset.tq){const t=(tpl[curLang()]||tpl.es||[]).find(x=>x.intent===b.dataset.tq);if(t){$('#wain').value=t.text;pv()}}
+  else if(b.id==='wamic'){const r=new SR();r.lang='es-MX';r.onresult=ev=>{$('#wain').value=ev.results[0][0].transcript;pv()};
+    r.onerror=()=>alert(T('No se pudo usar el micrófono (requiere permiso e internet).'));r.start()}});
+$('#wath').addEventListener('keydown',e=>{if(e.target.id==='wain'&&e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendHost()}});
+$('#wath').addEventListener('input',e=>{if(e.target.id!=='wain')return;const t=e.target;t.style.height='';t.style.height=Math.min(t.scrollHeight,140)+'px';clearTimeout(t._t);t._t=setTimeout(pv,400)});
+$('#wasync').onclick=async()=>{$('#wasync').disabled=true;await post('/api/sync');await loadChats();$('#wasync').disabled=false};
+const OF=[['price','money','Precio'],['hours','clock','Horario'],['meeting_point','pin','Punto de encuentro'],['contact','phone','Teléfono / WhatsApp'],
+  ['duration','timer','Duración'],['includes','gift','Qué incluye'],['payment','card','Formas de pago']];
+async function loadOp(){const o=(await api('/api/operator'))||{};
+  $('#opf').innerHTML='<small>'+T('Usa números cuando puedas (ej. "350 MXN", "9:00 a 14:00"): se entienden en cualquier idioma.')+'</small>'
+   +OF.map(([k,i,l])=>`<label>${ic(i)} ${l}<input id="o_${k}" maxlength="120" value="${esc(o[k]&&o[k]!=='(sin definir)'?o[k]:'')}"></label>`).join('')+'<button id="ops">Guardar</button> <small id="opm"></small>'}
+$('#opf').onclick=async e=>{if(e.target.id!=='ops')return;const b={};OF.forEach(([k])=>b[k]=$('#o_'+k).value);
+  const r=await api('/api/operator',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(b)});
+  $('#opm').textContent=r?T('Guardado.'):T('No se pudo guardar');for(const k in tpl)delete tpl[k];SIG='';loadChats()};
+api('/api/langs').then(l=>{LANGS=l||['es']});
+if('speechSynthesis' in window)speechSynthesis.getVoices();
+addEventListener('online',()=>{loadShare();post('/api/sync').then(loadChats)});addEventListener('offline',loadShare);
+// Arrancan en initUI (abajo), no aquí: si pintan antes de saber el idioma salen en español.
+setInterval(()=>{if(!document.hidden)loadChats()},4000);
+$('#t2').addEventListener('click',loadChats);
+const setArea=async(lat,lon,name)=>{
+  $('#zres').textContent=T('Descargando lugares…');
+  const r=await post('/api/area',{lat,lon,name,radius_m:+$('#zr').value});
+  $('#zres').textContent=r?`Listo: ${r.count} lugares en ${r.name}.`:T('No se pudo (¿sin internet?). Se conserva la zona anterior.');
+  load();
+};
+$('#geo').onclick=()=>{
+  if(!navigator.geolocation){$('#zres').textContent=T('Tu navegador no permite ubicación.');return}
+  $('#zres').textContent=T('Obteniendo ubicación…');
+  navigator.geolocation.getCurrentPosition(p=>setArea(p.coords.latitude,p.coords.longitude,''),
+    ()=>{$('#zres').textContent=T('Sin permiso de ubicación. Busca tu localidad por nombre.')},{timeout:10000});
+};
+let zr=[];
+$('#zb').onclick=async()=>{
+  const q=$('#zq').value.trim();if(q.length<2)return;
+  zr=(await api('/api/geocode?q='+encodeURIComponent(q)))||[];
+  $('#zres').innerHTML=zr.length?zr.map((r,i)=>`<button class="alt" data-z="${i}">${esc(r.name)}</button>`).join('<br>'):T('Sin resultados (requiere internet).');
+};
+$('#zres').onclick=e=>{const i=e.target.closest('button')?.dataset.z;if(i==null)return;setArea(zr[i].lat,zr[i].lon,zr[i].name)};
+let rvId=null;
+async function openRv(id){
+  rvId=id;
+  const d=await api('/api/places/'+encodeURIComponent(id)+'/reviews');
+  const rs=d?d.reviews:[];
+  $('#rvbody').innerHTML=`<h3>Reseñas</h3><small>Sin verificar: las escribe cualquier visitante.</small>
+   ${d&&d.n?`<p>${ic('star','fill star')} <b>${d.avg.toFixed(1)}</b> (${d.n}) · Temas: ${esc(d.summary.temas.join(', ')||'—')} · ${ic('up')} ${d.summary.positivas} · ${ic('down')} ${d.summary.negativas}</p>`:'<p>Aún no hay reseñas. ¡Sé el primero!</p>'}
+   ${rs.map(r=>`<div class="box"><b>${esc(r.author)}</b> ${stars(r.rating)}<br>${esc(r.text)}<br><small>${esc(r.created_at.slice(0,10))}</small></div>`).join('')}
+   <h4>Escribe tu reseña</h4>
+   <input id="ra" placeholder=T("Tu nombre o alias (sin datos personales)") maxlength="30">
+   <select id="rs">${[5,4,3,2,1].map(n=>`<option value="${n}">${n} estrella${n>1?'s':''}</option>`).join('')}</select>
+   <textarea id="rt" rows="3" maxlength="500" placeholder=T("Cuéntanos tu experiencia (mín. 10 caracteres)")></textarea>
+   <p id="rm" class="warn hide"></p><button id="rsend">Publicar</button>`;
+  if(!$('#rv').open)$('#rv').showModal();
+}
+document.addEventListener('click',e=>{const id=e.target.closest('[data-rv]')?.dataset.rv;if(id!=null)openRv(id)});
+$('#rv').addEventListener('click',async e=>{
+  if(e.target.id!=='rsend')return;
+  const msg=t=>{$('#rm').textContent=t;$('#rm').classList.remove('hide')};
+  try{
+    const r=await fetch(U('/api/places/'+encodeURIComponent(rvId)+'/reviews'),{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({author:$('#ra').value.trim(),rating:+$('#rs').value,text:$('#rt').value.trim()})});
+    if(r.ok){await openRv(rvId);load();return}
+    const j=await r.json().catch(()=>({}));
+    msg(typeof j.detail==='string'?j.detail:T('Revisa los campos: nombre (2-30) y reseña (10-500 caracteres).'));
+  }catch{msg(T('No se pudo enviar. Revisa que la app esté corriendo.'))}
+});
+// Descargar: trae los lugares de la zona y los deja guardados en el equipo (la app ya funciona sin internet con ellos).
+$('#rf').onclick=async()=>{const b=$('#rf'),h=b.innerHTML;b.disabled=true;b.querySelector('.rfl').textContent=T('Descargando…');
+  const r=navigator.onLine?await post('/api/places/refresh'):null;
+  b.innerHTML=r?ic('check')+'<span class="rfl">Guardado</span>':ic('wifioff')+'<span class="rfl">Sin internet</span>';
+  if(!r)alert(T('Sin internet: no se pudo descargar. La app sigue funcionando con los lugares que ya están guardados.'));
+  await load();setTimeout(()=>{b.innerHTML=h;b.disabled=false},2500)};
+// ---------- Conversar: traductor cara a cara con voz ----------
+// Dos idiomas a elegir: el tuyo (ML) y el del visitante (VL).
+// Orden de traducción: 1) frases guardadas (sin internet)  2) traductor del navegador (sin internet si ya lo descargó)
+// 3) internet (servidor, con caché). Si nada funciona, se avisa y se sugieren las palabras rápidas.
+let PB={ui:{},phrases:[]},CV=[],VL='en',ML='es';
+const cvSave=()=>{try{localStorage.setItem('conv',JSON.stringify(CV.slice(-40)));localStorage.setItem('convLang',VL);localStorage.setItem('convMine',ML)}catch{}};
+try{CV=JSON.parse(localStorage.getItem('conv')||'[]');VL=localStorage.getItem('convLang')||'en';ML=localStorage.getItem('convMine')||'es'}catch{}
+const ui=k=>(PB.ui[VL]||PB.ui.en||{})[k]||(PB.ui.es||{})[k]||'';
+const normT=t=>t.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^\p{L}\p{N} ]/gu,' ').replace(/\s+/g,' ').trim();
+function pbFind(text,src,dst){const n=normT(text);
+  for(const p of PB.phrases)for(const l in p.t)if((src==='auto'||src===l)&&normT(p.t[l])===n&&p.t[dst])return {text:p.t[dst],src:l,via:'frase'};return null}
+async function translate(text,src,dst){
+  if(src===dst)return {text,src,via:'igual'};
+  const f=pbFind(text,src,dst);if(f)return f;
+  if(src!=='auto'){const x=await localTr(text,src,dst);if(x)return {text:x,src,via:'equipo'}}
+  const r=await post('/api/translate',{text,src,dst});
+  if(r&&r.text)return {text:r.text,src:r.src,via:r.via==='frase'?'frase':'internet'};
+  return {text:null,src:(r&&r.src)||src,via:null};
+}
+const VIA={frase:['book','frase guardada'],equipo:['laptop','traducido en este equipo'],internet:['globe','traducido por internet'],igual:['check','mismo idioma']};
+const needVL=()=>{if(VL!=='auto')return false;cvMsg(T('Primero elige el idioma del visitante.'));return true};
+// Última traducción mostrada en cada panel, para los botones escuchar/copiar/pantalla completa.
+const SHOWN={them:null,me:null};
+function cvRender(){
+  const box=$('#cvlog');
+  box.innerHTML=CV.length?CV.map((m,i)=>{const me=m.who==='me',v=VIA[m.via];
+    const listo=m.tr&&m.tr!=='…';   // mientras llega, no se ofrecen acciones sobre un texto que aún no está
+    return `<div class="bub ${me?'me':'them'}"><small>${me?T('Tú'):T('Visitante')} · ${esc(LN[m.src]||m.src)}</small>
+      <div class="o" dir="auto" data-raw>${esc(m.text)}</div>
+      ${m.tr?`<div class="t" dir="auto" data-raw>${esc(m.tr)}</div>${v?`<small class="via">${ic(v[0])}${v[1]}</small>`:''}
+        ${listo?`<div class="bacts"><button class="alt" data-cvsay="${i}">${ic('volume')}Escuchar</button>
+          <button class="alt" data-cvdet="${i}">${ic('list')}Detalle</button></div>`:''}`
+       :`<div class="t err">No se pudo traducir (sin internet). Usen las palabras rápidas: ya están traducidas.</div>`}</div>`}).join('')
+   :`<div class="cvempty"><b>${T('Así funciona:')}</b><ol><li>${T('Elige tu idioma y el del visitante.')}</li><li>${T('Toquen ')}${ic('mic')} ${T('para hablar, escriban, o usen las palabras rápidas.')}</li><li>${T('Se traduce mientras escriben y se lee en voz alta.')}</li></ol></div>`;
+  $('#cvlhint').hidden=CV.length<2;
+  box.scrollLeft=box.scrollWidth;   // lo más reciente queda a la vista, a la derecha
+  // Cada panel muestra en grande lo último que dijo el otro, ya traducido a su idioma.
+  const lastMe=[...CV].reverse().find(m=>m.who==='me'&&m.tr),lastThem=[...CV].reverse().find(m=>m.who==='them'&&m.tr);
+  paint('#cvforyou','#cvvacts',lastMe,'them',ui('hint')||'…');
+  paint('#cvforme','#cvmacts',lastThem,'me',T('Aquí verás lo que diga el visitante, traducido a tu idioma.'));
+}
+function paint(sel,acts,m,side,vacio){
+  const el=$(sel),txt=m?m.tr:'',prev=SHOWN[side]&&SHOWN[side].text;
+  el.textContent=txt||vacio;el.classList.toggle('empty',!txt);
+  SHOWN[side]=m?{text:m.tr,lang:m.dst}:null;
+  $(acts).hidden=!txt;
+  if(txt&&txt!==prev){el.classList.remove('flash');void el.offsetWidth;el.classList.add('flash')}
+}
+// Respuesta con datos de la finca: en tu idioma si hay plantilla; si no, en español (y se traduce desde español).
+function tplPair(intent){const mine=(tpl[ML]||[]).find(x=>x.intent===intent),es=tplOf(intent);
+  return mine&&mine.lang_ok?{text:mine.text,src:ML}:es?{text:es.text,src:'es'}:null}
+function cvPanels(){
+  $('#cvvwho').textContent=ui('you');$('#cvvin').placeholder=ui('ph');
+  $('#cvv').dir=VL==='ar'||VL==='he'?'rtl':'ltr';$('#cvm').dir=ML==='ar'||ML==='he'?'rtl':'ltr';
+  $('#cvmin').placeholder=T('Escribe en')+' '+ls(ML)+'…';
+  // El distintivo dice en qué idioma lee cada quien el recuadro grande.
+  $('#cvvtag').innerHTML=ic('volume')+esc(VL==='auto'?T('elige idioma'):LN[VL]||VL);
+  $('#cvmtag').innerHTML=ic('volume')+esc(LN[ML]||ML);
+  $('#cvvsay').textContent=$('#cvmsay').textContent=T('Escuchar');
+  const vq=PB.phrases.filter(p=>p.side!=='host'&&p.t[VL]);
+  $('#cvvquick').textContent=(ui('quick')||T('Preguntas rápidas'))+(vq.length?' ('+vq.length+')':'');
+  $('#cvvq').innerHTML=vq.map(p=>`<button class="alt chip" data-ph="${p.id}" data-who="them">${ic(p.icon)}${esc(p.t[VL])}</button>`).join('')
+    ||'<small class="none">(Sin frases guardadas en este idioma: escriban o hablen)</small>';
+  const host=PB.phrases.filter(p=>p.side!=='visitor').map(p=>`<button class="alt chip" data-ph="${p.id}" data-who="me">${ic(p.icon)}${esc(p.t[ML]||p.t.es)}</button>`);
+  const info=(tpl.es||[]).filter(t=>t.intent!=='seguimiento').map(t=>{const x=tplPair(t.intent),lbl=ML==='es'?t.label:(x&&x.src===ML?x.text.split(/[.。:：]/)[0]:t.label).replace(/^(.{28}).+$/,'$1…');
+    return `<button class="alt chip" data-tp="${esc(t.intent)}" title="${esc(x?x.text:'')}">${ic(t.icon)}${esc(lbl)}</button>`});
+  $('#cvmq').innerHTML=[...host,...info].join('');
+  live('them');live('me');  // la vista previa cambia de idioma con los selectores
+}
+// ---- Traducción mientras se escribe (vista previa, antes de enviar) ----
+// Primero prueba lo que funciona sin internet (frases guardadas, traductor del navegador);
+// solo consulta al servidor tras una pausa más larga, para no gastar la cuota en cada tecla.
+const LIVE={them:{seq:0,t:null,res:null},me:{seq:0,t:null,res:null}};
+const LVIA={frase:'frase guardada',equipo:'traducido en este equipo',internet:'traducido por internet',igual:'mismo idioma'};
+function live(who){
+  const box=$(who==='them'?'#cvvlive':'#cvmlive'),inp=$(who==='them'?'#cvvin':'#cvmin');
+  const text=inp.value.trim(),src=who==='them'?VL:ML,dst=who==='them'?ML:VL,st=LIVE[who];
+  clearTimeout(st.t);const seq=++st.seq;st.res=null;
+  if(!text||src==='auto'){box.className='live';box.innerHTML='';return}
+  box.classList.add('on');
+  // via: clave de VIA cuando la traducción es buena; '' cuando es un aviso o aún se está esperando.
+  const show=(t,via,wait)=>{if(seq!==st.seq)return;box.classList.toggle('wait',!!wait);
+    if(via&&!wait)st.res={text:t,via,for:text,src,dst};  // se reaprovecha al enviar: no se traduce dos veces
+    box.innerHTML=`<div class="lv">${ic('lang')}${esc(ls(dst))}${via?' · '+esc(LVIA[via]):''}</div><div class="lt" dir="auto">${esc(t)}</div>`};
+  const f=pbFind(text,src,dst);if(f){show(f.text,'frase');return}   // 1) frases guardadas: al instante y sin internet
+  if(src===dst){show(text,'igual');return}
+  st.t=setTimeout(async()=>{
+    if(seq!==st.seq)return;
+    show(T('traduciendo…'),'',true);
+    // Se piden a la vez el traductor del navegador y el servidor: gana el que conteste primero,
+    // así no se espera al navegador cuando no tiene ese par de idiomas descargado.
+    const loc=localTr(text,src,dst).then(x=>x?{text:x,via:'equipo'}:null);
+    const net=navigator.onLine?post('/api/translate',{text,src,dst}).then(r=>r&&r.text?{text:r.text,via:r.via==='frase'?'frase':'internet'}:null):Promise.resolve(null);
+    const r=await firstOk([loc,net]);if(seq!==st.seq)return;
+    if(r)show(r.text,r.via);
+    else show(navigator.onLine?T('No se pudo traducir. Usen las palabras rápidas.')
+      :T('Sin internet: usen las palabras rápidas, ya están traducidas.'),'');
+  },700);   // pausa antes de consultar fuera: el traductor gratuito tiene límite diario
+}
+// Devuelve el primer resultado útil; null solo si fallan todos.
+const firstOk=ps=>new Promise(res=>{let n=ps.length;const fin=v=>{if(v)res(v);else if(!--n)res(null)};
+  ps.forEach(p=>p.then(fin,()=>fin(null)))});
+const liveClear=who=>{const st=LIVE[who];clearTimeout(st.t);st.seq++;st.res=null;
+  const b=$(who==='them'?'#cvvlive':'#cvmlive');b.className='live';b.innerHTML=''};
+// El campo crece con el texto, muestra cuántos caracteres quedan y el botón de limpiar.
+function grow(who){
+  const inp=$(who==='them'?'#cvvin':'#cvmin'),n=inp.value.length;
+  inp.style.height='auto';const h=inp.scrollHeight;
+  inp.style.height=Math.min(h,150)+'px';inp.style.overflowY=h>150?'auto':'hidden';  // barra solo si ya no cabe
+  $(who==='them'?'#cvvclr':'#cvmclr').hidden=!n;
+  const c=$(who==='them'?'#cvvcnt':'#cvmcnt');c.hidden=n<400;c.textContent=n+'/500';c.classList.toggle('max',n>=500);
+}
+async function cvAdd(who,text,src,ready){
+  text=(text||'').trim();if(!text)return;
+  const dst=who==='me'?VL:ML;
+  const id=CV.push({who,text,src,dst,tr:'…',via:''})-1;cvRender();
+  const r=ready?(typeof ready==='string'?{text:ready,src,via:'frase'}:{...ready,src}):await translate(text,src,dst);
+  if(who==='them'&&src==='auto'&&r.src&&LN[r.src]){VL=r.src;$('#cvlang').value=VL;await getTpl(VL);cvPanels()}
+  Object.assign(CV[id],{tr:r.text,via:r.via,src:r.src||src});cvSave();cvRender();
+  if(r.text&&$('#cvauto').checked)say(r.text,dst);
+}
+// Micrófono: reconocimiento de voz del navegador (en Chrome necesita internet).
+let rec=null;
+const micIdle=b=>{b.classList.remove('rec');b.innerHTML=ic('mic')};
+function listen(who,btn){
+  if(rec){rec.stop();return}
+  if(!SR){cvMsg(T('Este navegador no reconoce voz. Usa Chrome o Edge, o escribe.'));return}
+  if(who==='them'&&needVL())return;
+  const lang=who==='me'?ML:VL;
+  const inp=who==='me'?$('#cvmin'):$('#cvvin');rec=new SR();rec.lang=BCP[lang]||lang;rec.interimResults=true;
+  rec.onresult=e=>{inp.value=[...e.results].map(x=>x[0].transcript).join('');
+    grow(who);live(who);   // se va traduciendo mientras dictan
+    if(e.results[e.results.length-1].isFinal)send(who)};
+  rec.onerror=e=>cvMsg(e.error==='network'?T('El micrófono del navegador necesita internet. Marca "Micrófono sin internet" para usar el de este equipo.')
+    :e.error==='not-allowed'||e.error==='service-not-allowed'?T('Permite el micrófono en el navegador (candado junto a la dirección).')
+    :e.error==='no-speech'?T('No escuché nada. Toca el micrófono otra vez y habla cerca.'):T('No se pudo escuchar. Intenta otra vez o escribe.'));
+  rec.onend=()=>{micIdle(btn);rec=null};
+  btn.classList.add('rec');btn.innerHTML=ic('stop');cvMsg('');
+  try{rec.start()}catch{rec=null;micIdle(btn)}
+}
+const cvMsg=t=>{$('#cvmsg').textContent=t;$('#cvmsg').hidden=!t};
+function cvNet(){const on=navigator.onLine;$('#cvnet').className='net '+(on?'on':'off');
+  $('#cvnet').innerHTML=on?ic('wifi')+`<span>${T('Con internet: traduce cualquier frase.')}</span>`
+  :ic('wifioff')+'<span>Sin internet: funcionan las <b>palabras rápidas</b> (ya traducidas)'+('Translator' in self?T(' y el traductor de este navegador'):'')+'. El micrófono necesita internet.</span>'}
+const langList=(sel,auto)=>{const has=Object.keys(PB.ui);return (auto?`<option value="auto">${T('Detectar idioma')}</option>`:'')
+  +Object.keys(LN).map(l=>`<option value="${l}"${l===sel?' selected':''}>${esc(LN[l])}${has.includes(l)?' ✓':''}</option>`).join('')};
+async function cvLangs(){$('#cvlang').innerHTML=langList(VL,true);$('#cvmine').innerHTML=langList(ML,false);
+  await getTpl('es');if(ML!=='es')await getTpl(ML);if(VL!=='auto')await getTpl(VL);cvPanels()}
+async function cvInit(){PB=(await api('/api/phrases'))||PB;await cvLangs();cvRender();cvNet();grow('them');grow('me')}
+micIdle($('#cvvmic'));micIdle($('#cvmmic'));
+$('#cvlang').onchange=async e=>{VL=e.target.value;cvSave();await cvLangs()};
+$('#cvmine').onchange=async e=>{ML=e.target.value;cvSave();await cvLangs()};
+$('#cvswap').onclick=async e=>{if(needVL())return;const b=e.currentTarget;b.classList.toggle('spin');
+  [VL,ML]=[ML,VL];[$('#cvvin').value,$('#cvmin').value]=[$('#cvmin').value,$('#cvvin').value];
+  grow('them');grow('me');cvSave();await cvLangs()};
+$('#cvclear').onclick=()=>{if(!CV.length||confirm(T('¿Borrar la conversación?'))){CV=[];cvSave();cvRender()}};
+// Enviar: pasa al historial y lo lee en voz alta. Reaprovecha la traducción de la vista previa.
+function send(who){
+  const inp=$(who==='them'?'#cvvin':'#cvmin'),t=inp.value.trim();if(!t)return;
+  if(who==='me'&&needVL())return;
+  const st=LIVE[who],src=who==='them'?VL:ML;
+  const cache=st.res&&st.res.for===t&&st.res.src===src&&st.res.dst===(who==='them'?ML:VL)?{text:st.res.text,via:st.res.via}:null;
+  inp.value='';grow(who);liveClear(who);cvAdd(who,t,src,cache);
+}
+$('#cvvsend').onclick=()=>send('them');$('#cvmsend').onclick=()=>send('me');
+for(const [who,inp,clr] of [['them','#cvvin','#cvvclr'],['me','#cvmin','#cvmclr']]){
+  $(inp).oninput=()=>{grow(who);live(who)};
+  // Enter envía; Mayús+Enter hace un salto de línea.
+  $(inp).onkeydown=e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send(who)}};
+  $(clr).onclick=()=>{$(inp).value='';grow(who);liveClear(who);$(inp).focus()};
+}
+// El micrófono del navegador necesita internet; con la casilla marcada se usa el modelo de este equipo.
+const micGo=(who,btn)=>$('#cvoff').checked?listenOff(who,btn):listen(who,btn);
+$('#cvvmic').onclick=e=>micGo('them',e.currentTarget);$('#cvmmic').onclick=e=>micGo('me',e.currentTarget);
+// Pantalla completa: para enseñarle la traducción al visitante.
+let BIG=null;
+const bigOpen=s=>{if(!s||!s.text)return;BIG=s;$('#cvbigt').textContent=s.text;$('#cvbigt').lang=s.lang;$('#cvbig').showModal()};
+$('#cvbigx').onclick=()=>$('#cvbig').close();
+$('#cvbigsay').onclick=()=>BIG&&say(BIG.text,BIG.lang);
+async function copy(t,b){try{await navigator.clipboard.writeText(t);const h=b.innerHTML;
+  b.innerHTML=ic('check')+T('Copiado');setTimeout(()=>{b.innerHTML=h},1400)}catch{cvMsg(T('No se pudo copiar. Selecciona el texto a mano.'))}}
+$('#p3').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;const d=b.dataset;
+  if(d.ph){const p=PB.phrases.find(x=>x.id===d.ph);if(!p)return;
+    if(d.who==='them')cvAdd('them',p.t[VL],VL,p.t[ML]||null);
+    else if(!needVL())cvAdd('me',p.t[ML]||p.t.es,p.t[ML]?ML:'es',p.t[VL]||null)}
+  else if(d.tp){if(needVL())return;const x=tplPair(d.tp),t=(tpl[VL]||[]).find(y=>y.intent===d.tp);if(!x)return;
+    cvAdd('me',x.text,x.src,t&&t.lang_ok?t.text:null)}
+  else if(d.say){const s=SHOWN[d.say];if(!s)return;
+    if(!voiceFor(s.lang))cvMsg('Este equipo no tiene voz para '+ls(s.lang)+T('. Muestren el texto en pantalla.'));say(s.text,s.lang)}
+  else if(d.copy){const s=SHOWN[d.copy];if(s)copy(s.text,b)}
+  else if(d.big){bigOpen(SHOWN[d.big])}
+  else if(d.cvsay!=null){const m=CV[d.cvsay];if(m&&m.tr){if(!voiceFor(m.dst))cvMsg('Este equipo no tiene voz para '+ls(m.dst)+T('. Muestren el texto en pantalla.'));say(m.tr,m.dst)}}
+  else if(d.cvdet!=null)verDetalle(+d.cvdet)});
+// ---------- Detalle de una traducción ----------
+// Se pide al abrirlo, no antes: desglosar palabra por palabra consume cuota del traductor.
+let DET=0,DETMSG=null;
+async function verDetalle(i){
+  const m=CV[i];if(!m)return;
+  DETMSG=m;
+  const seq=++DET,dlg=$('#cvdet'),c=$('#cvdetc');
+  const cab=tr=>`<h3>${ic('lang')}Detalle de la traducción</h3>
+    <div class="par"><small>${esc(LN[m.src]||m.src)} · lo que se dijo</small>
+      <div dir="auto">${esc(m.text)}</div></div>
+    <div class="par"><small>${esc(LN[m.dst]||m.dst)} · traducción</small>
+      <div class="grande" dir="auto" data-raw>${esc(tr||'')}</div></div>`;
+  const pie=`<div class="acts"><button class="alt" data-detsay="1">${ic('volume')}Escuchar</button>
+    <button id="cvdetx">${ic('x')}Cerrar</button></div>`;
+  c.innerHTML=cab(m.tr)+`<p class="cargando">${ic('refresh')} Buscando más detalle…</p>`+pie;
+  if(!dlg.open)dlg.showModal();
+  const d=await post('/api/translate/detail',{text:m.text,src:m.src,dst:m.dst});
+  if(seq!==DET||!dlg.open)return;
+  // La del servidor manda: la de la tarjeta puede estar aún a medias.
+  if(d&&d.text){DETMSG={...m,tr:d.text};CV[i]&&CV[i].tr==='…'&&Object.assign(CV[i],{tr:d.text});}
+  const trozos=[];
+  if(d&&d.roman_origen)trozos.push(`<div class="par"><small>Cómo suena lo que dijo</small>
+    <div class="son">${esc(d.roman_origen)}</div></div>`);
+  if(d&&d.roman_destino)trozos.push(`<div class="par"><small>Cómo se pronuncia la traducción</small>
+    <div class="son">${esc(d.roman_destino)}</div></div>`);
+  if(d&&d.alternativas&&d.alternativas.length)trozos.push(`<div><b>Otras formas de decirlo</b>
+    <ul>${d.alternativas.map(a=>`<li dir="auto">${esc(a)}</li>`).join('')}</ul></div>`);
+  if(d&&d.palabras&&d.palabras.length)trozos.push(`<div><b>Palabra por palabra</b>
+    <div class="pal">${d.palabras.map(p=>`<div dir="auto"><b>${esc(p.de)}</b> <span>→ ${esc(p.a)}</span></div>`).join('')}</div>
+    <p class="fix">${ic('alert')} Cada palabra suelta, fuera de contexto: a veces no coincide con la frase entera.</p></div>`);
+  if(!trozos.length)trozos.push(`<p class="fix">${ic('help')} No hay más detalle para esta frase.
+    ${navigator.onLine?'':T('Sin internet solo se puede mostrar la traducción guardada.')}</p>`);
+  c.innerHTML=cab((d&&d.text)||m.tr)+trozos.join('')+pie;
+}
+$('#cvdet').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
+  if(b.id==='cvdetx')$('#cvdet').close();
+  else if(b.dataset.detsay&&DETMSG&&DETMSG.tr)say(DETMSG.tr,DETMSG.dst)});
+addEventListener('online',cvNet);addEventListener('offline',cvNet);
+// ---------- Mirar: identificar fotos en el propio equipo ----------
+// El módulo (y con él la librería de modelos) se carga solo cuando se entra a esta pestaña,
+// para no gastar datos de quien nunca la use.
+let AI=null,MCAT=null,MGRUPO='',MBLOB=null;
+const aiLib=async()=>AI||(AI=await import(U('/static/ai.js')));
+const mdlBarra=(k,pct)=>{const b=document.querySelector(`[data-mdl="${k}"] .bar`);if(!b)return;
+  b.hidden=false;b.firstElementChild.style.width=pct+'%'};
+const ETQ={'al-dia':['check','Al día'],desfasado:['alert','Cambiaron: hay que recalcularlas'],
+  faltan:['alert',T('Sin calcular: la cámara no puede funcionar')]};
+let ETQMSG='';   // sobrevive a los repintados del panel
+async function mdlPinta(){
+  const lib=await aiLib(),st=await lib.estado();
+  let etq=null;try{etq=await lib.estadoEtiquetas()}catch{}
+  const e=etq?ETQ[etq.estado]:null;
+  $('#mdlbox').innerHTML=`<div class="lbl">${ic('chip')} ${T('Modelos guardados en este equipo')}</div>`
+   +['mirar','oir'].map(k=>{const m=st[k];
+    return `<div class="mdl" data-mdl="${k}">${ic('chip','big')}
+      <div class="txt"><b>${esc(T(m.nombre))}</b><p>${esc(T(m.que))}</p><div class="bar" hidden><i></i></div></div>
+      <div style="text-align:right">
+       <div class="peso">${m.guardado?`${ic('check')}${T('guardado')}`:'~'+m.mb+' MB'}</div>
+       ${m.guardado?'':`<button class="alt sm" data-get="${k}">${ic('download')}${T('Descargar')}</button>`}</div></div>`}).join('')
+   +`<small>${T('Se descargan una sola vez. Conviene hacerlo donde haya buena señal: después funcionan sin internet.')}</small>`
+   +`<details class="qd" id="etqd"${etq&&etq.estado!=='al-dia'?' open':''}>
+      <summary>${ic('chev','car')}${T('Etiquetas de la cámara')}${e?` · ${ic(e[0])}${esc(e[1])}`:''}</summary>
+      <div class="mdl" data-mdl="texto">${ic('list','big')}
+       <div class="txt"><p>${T('Reconoce')} <b>${etq?etq.n:'…'}</b> ${T('cosas, escritas en')} <code>data/vision_labels.json</code>${T('. Quien conozca la zona puede añadir o corregir términos ahí. Después hay que recalcularlas una vez: se descarga un modelo de')} ${st.texto.mb} ${T('MB que no vuelve a hacer falta.')}</p>
+        <div class="bar" hidden><i></i></div><p id="etqmsg">${esc(ETQMSG)}</p></div>
+       <div style="text-align:right"><button class="alt sm" data-recalc="1">${ic('refresh')}${T('Recalcular')}</button></div>
+      </div></details>`;
+}
+// Hay dos botones de recalcular (el del panel y el del aviso en los resultados) y el panel
+// se repinta solo, así que no basta con desactivar el que se pulsó.
+let RECALC=false;
+async function mdlRecalc(b){
+  if(RECALC)return;
+  RECALC=true;
+  const lib=await aiLib();
+  b.disabled=true;const h=b.innerHTML;b.innerHTML=ic('refresh')+T('Calculando…');
+  const msg=t=>{ETQMSG=t;const m=$('#etqmsg');if(m)m.textContent=t};
+  try{
+    const r=await lib.recalcular(p=>{mdlBarra('texto',p.pct);msg(`Descargando el modelo de texto… ${p.pct}%`)});
+    msg(`Listo: ${r.n} etiquetas recalculadas.`);
+    await mdlPinta();if($('#etqd'))$('#etqd').open=true;
+    if(MBLOB)await mirarFoto(MBLOB);   // repetir la última foto ya con las etiquetas nuevas
+  }catch(e){msg(T('No se pudo: ')+(e.message||e));b.disabled=false;b.innerHTML=h;await mdlPinta()}
+  finally{RECALC=false}
+}
+async function mdlBaja(k){
+  const lib=await aiLib(),b=document.querySelector(`[data-get="${k}"]`);
+  if(b){b.disabled=true;b.innerHTML=ic('download')+T('Descargando…')}
+  try{await (k==='mirar'?lib.cargarMirar:lib.cargarOir)(p=>mdlBarra(k,p.pct));await mdlPinta()}
+  catch(e){alert(T('No se pudo descargar: ')+(e.message||e));await mdlPinta()}
+}
+async function mirarInit(){
+  await mdlPinta();
+  if(!MCAT){MCAT=await api('/api/vision-labels');if(!MCAT)return}
+  $('#mgrupos').innerHTML=[{id:'',nombre:T('Todo'),icon:'search'},...MCAT.grupos]
+    .map(g=>`<button class="alt chip${g.id===MGRUPO?' sug':''}" data-mg="${esc(g.id)}">${ic(g.icon)}${esc(T(g.nombre))}</button>`).join('');
+}
+// MSEQ: si llegan dos peticiones (cambiar de grupo mientras clasifica), solo pinta la última
+// pedida, no la última en terminar; si no, el resultado mostrado no sería el del grupo elegido.
+let MSEQ=0,MURL=null;
+async function mirarFoto(file){
+  if(!file)return;MBLOB=file;const seq=++MSEQ;
+  if(MURL)URL.revokeObjectURL(MURL);          // liberar la foto anterior
+  MURL=URL.createObjectURL(file);
+  $('#mprev').className='mprev';$('#mprev').innerHTML=`<img src="${MURL}" alt=T("Foto por identificar")>`;
+  $('#mres').innerHTML='<small>'+ic('refresh')+' Mirando la foto…</small>';
+  $('#mres').dataset.top='';
+  try{
+    const lib=await aiLib();
+    await lib.cargarMirar(p=>{if(seq===MSEQ){$('#mres').innerHTML=`<small>Descargando el modelo… ${p.pct}%</small>`;mdlBarra('mirar',p.pct)}});
+    if(seq!==MSEQ)return;
+    await mdlPinta();
+    const r=await lib.mirar(file,MGRUPO||null,3);
+    if(seq!==MSEQ)return;
+    const [mejor]=r.resultados;
+    if(!mejor){$('#mres').innerHTML='<p class="warn">Este grupo no tiene etiquetas. Elige otro o añádelas en data/vision_labels.json.</p>';return}
+    // Se traduce al idioma del visitante para poder enseñárselo.
+    const tr=VL&&VL!=='auto'&&VL!=='es'?await translate(mejor.es,'es',VL):null;
+    if(seq!==MSEQ)return;
+    $('#mres').innerHTML=r.resultados.map((x,i)=>`<div class="hit${i?'':' mejor'}">
+        <div class="l"><span>${esc(x.es)}</span><span class="pc">${(x.pct*100).toFixed(0)}%</span></div>
+        ${i===0&&tr&&tr.text?`<div class="tr" dir="auto">${esc(tr.text)}</div>`:''}
+        <div class="bar"><i style="width:${(x.pct*100).toFixed(0)}%"></i></div></div>`).join('')
+      +`<div class="acts"><button class="alt sm" data-msay="1">${ic('volume')}Escuchar</button>
+        <button class="alt sm" data-msend="1">${ic('send')}Decírselo al visitante</button></div>`
+      +(r.resultados[1]&&mejor.pct-r.resultados[1].pct<0.15
+        ?`<p class="warn">${ic('help')} No está claro: se parece casi igual a las tres. Acota el grupo o toma la foto más de cerca.</p>`:'')
+      +`<p class="fix">${ic('alert')} Es una estimación del equipo, no una certeza: compruébalo antes de darlo por bueno.
+        ${r.desfasado?`<br><b>Las etiquetas cambiaron desde la última vez</b>, así que esto puede no corresponder.
+          <button class="alt sm" data-recalc="1">${ic('refresh')}Recalcular ahora</button>`:''}</p>`;
+    $('#mres').dataset.top=mejor.es;
+  }catch(e){if(seq!==MSEQ)return;
+    const m=String(e&&e.message||e);
+    $('#mres').innerHTML=`<p class="warn">${esc(/decode|image|Unsupported/i.test(m)
+      ?T('No se pudo leer esa imagen. Prueba con otra foto (JPG o PNG).'):m)}</p>`}
+}
+$('#t4').onclick=()=>{tab(4);mirarInit()};
+$('#mfoto').onclick=()=>$('#mcam').click();$('#marchivo').onclick=()=>$('#mfile').click();
+// Se limpia el valor para que elegir dos veces la misma foto vuelva a disparar el evento.
+const alElegir=e=>{const f=e.target.files[0];e.target.value='';mirarFoto(f)};
+$('#mfile').onchange=alElegir;$('#mcam').onchange=alElegir;
+$('#p4').addEventListener('click',async e=>{const b=e.target.closest('button');if(!b)return;const d=b.dataset;
+  if(d.get)mdlBaja(d.get);
+  else if(d.recalc)mdlRecalc(b);
+  else if(d.mg!=null){MGRUPO=d.mg;mirarInit();if(MBLOB)mirarFoto(MBLOB)}
+  else if(d.msay){const t=$('#mres').dataset.top;if(t)say(t,'es')}
+  else if(d.msend){const t=$('#mres').dataset.top;if(!t)return;
+    if(needVL()){tab(3);return}
+    tab(3);cvAdd('me',t,'es')}});
+// ---------- Micrófono sin internet (Whisper en este equipo) ----------
+// OYENDO se marca antes de cualquier espera: si no, tocar el micrófono dos veces mientras
+// se descarga el modelo abriría dos grabaciones y la primera quedaría sin forma de cerrarse,
+// dejando el micrófono encendido hasta cerrar la pestaña.
+let GRAB=null,OYENDO=false;
+async function listenOff(who,btn){
+  if(GRAB){GRAB.parar();return}
+  if(OYENDO)return;
+  if(who==='me'&&needVL())return;
+  OYENDO=true;
+  const inp=$(who==='them'?'#cvvin':'#cvmin'),lang=who==='me'?ML:VL;
+  try{
+    cvMsg('');
+    const lib=await aiLib(),st=await lib.estado();
+    if(!st.oir.guardado&&!confirm(`Para escuchar sin internet hay que descargar una vez el reconocedor de voz (~${st.oir.mb} MB). ¿Descargarlo ahora?`))return;
+    btn.classList.add('rec');btn.innerHTML=ic('stop');
+    await lib.cargarOir(p=>cvMsg(`Descargando el reconocedor de voz… ${p.pct}%`));
+    cvMsg(T('Grabando. Toca otra vez para terminar.'));
+    GRAB=lib.grabar();
+    const audio=await GRAB.audio;GRAB=null;micIdle(btn);
+    cvMsg(T('Escuchando lo grabado…'));
+    const t=await lib.oir(audio,lang);
+    cvMsg(t?'':T('No se entendió nada. Inténtalo otra vez, más cerca del micrófono.'));
+    if(t){inp.value=t;grow(who);live(who);send(who)}
+  }catch(e){
+    cvMsg(e&&e.name==='NotAllowedError'?T('Permite el micrófono en el navegador (candado junto a la dirección).')
+      :T('No se pudo escuchar: ')+(e.message||e));
+  }finally{
+    if(GRAB)GRAB.parar();   // si algo falló a medias, cerrar el micrófono igualmente
+    GRAB=null;OYENDO=false;micIdle(btn);
+  }
+}
+// El idioma primero: así todo lo que se pinta después ya sale traducido.
+(async()=>{
+  await initUI();
+  themeBtn();
+  loadOp();loadShare();getTpl('es').then(()=>{renderThread();loadChats()});
+  cvInit();load();
+})();
+</script></body></html>

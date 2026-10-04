@@ -1,0 +1,10 @@
+# El motor de los modelos se usa tal cual viene publicado: si git le cambia los saltos
+# de línea, deja de coincidir con el original y cualquier diferencia es ruido.
+src/static/vendor/** -text
+*.wasm binary
+*.onnx binary
+
+# Los datos de la app son JSON que se edita a mano: saltos de línea normales.
+*.json text
+*.py text
+*.md text

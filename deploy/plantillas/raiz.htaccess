@@ -1,0 +1,29 @@
+# Todo /api/... lo atiende un solo PHP, igual que en la app completa lo atiende FastAPI.
+RewriteEngine On
+RewriteRule ^api/(.*)$ api/index.php?r=$1 [QSA,L]
+
+# El motor de los modelos pesa 22 MB y nunca cambia: que el navegador lo guarde.
+<IfModule mod_headers.c>
+  <FilesMatch "\.(wasm|onnx)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+  # El resto se revalida, para que al actualizar la demo no quede una versión vieja.
+  <FilesMatch "\.(html|js|json)$">
+    Header set Cache-Control "no-cache"
+  </FilesMatch>
+</IfModule>
+
+# Sin esto el navegador rechaza el .wasm y los modelos no arrancan.
+AddType application/wasm .wasm
+# Y el .mjs lo servía como text/plain: un módulo con ese tipo el navegador se niega a
+# ejecutarlo, así que el motor de los modelos no llegaba a cargar.
+AddType text/javascript .mjs .js
+
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css application/javascript application/json
+</IfModule>
+
+# La portada se guarda sin extensión (igual que /hero en la app completa).
+<Files "hero">
+  ForceType image/jpeg
+</Files>

@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Chat</title>
+<style>
+:root{color-scheme:light;--bg:#efeae2;--fg:#1f2328;--card:#fff;--mut:#6b6f76;--line:#d5d2cc;--ac:#2f6f4f;--ac-fg:#fff;--out:#d9fdd3;--shadow:#0002;--warn:#fff3cd}
+@media (prefers-color-scheme:dark){:root{color-scheme:dark;--bg:#0b141a;--fg:#e9edef;--card:#1f2c34;--mut:#8696a0;--line:#2a3942;--ac:#5fbf8f;--ac-fg:#0d1f16;--out:#005c4b;--shadow:#0006;--warn:#3a3013}}
+[hidden]{display:none!important}*{box-sizing:border-box}
+html,body{height:100%}body{margin:0;font-family:system-ui,sans-serif;background:var(--bg);color:var(--fg);display:flex;flex-direction:column}
+.ic{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
+button{font-family:inherit;font-size:15px;border:0;border-radius:22px;background:var(--ac);color:var(--ac-fg);padding:10px 16px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;justify-content:center}
+button.alt{background:var(--card);color:var(--ac);border:1px solid var(--ac)}
+input,textarea{font:inherit;font-size:16px;color:var(--fg);background:var(--card);border:1px solid var(--line);border-radius:22px;padding:11px 16px;width:100%}
+/* elegir idioma */
+#pick{flex:1;overflow:auto;padding:24px 16px;max-width:620px;margin:0 auto;width:100%}
+#pick h1{font-size:22px;margin:8px 0 4px;text-align:center}#pick p{text-align:center;color:var(--mut);margin:0 0 18px}
+.langs{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px}
+.langs button{background:var(--card);color:var(--fg);border:1px solid var(--line);border-radius:14px;padding:14px;font-size:17px;min-height:56px}
+.langs button.on{border:2px solid var(--ac);color:var(--ac);font-weight:700}
+#who{margin-top:18px;display:flex;flex-direction:column;gap:10px}
+/* chat */
+#chat{flex:1;display:flex;flex-direction:column;min-height:0}
+header{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--card);box-shadow:0 1px 2px var(--shadow)}
+.av{width:40px;height:40px;border-radius:50%;background:var(--ac);color:var(--ac-fg);display:flex;align-items:center;justify-content:center;flex:none}
+header b{display:block}header small{color:var(--mut)}header .sp{flex:1}
+#body{flex:1;overflow:auto;padding:14px;display:flex;flex-direction:column;gap:6px}
+.m{max-width:80%;padding:8px 10px 6px;border-radius:10px;box-shadow:0 1px 1px var(--shadow);font-size:16px;line-height:1.35;white-space:pre-wrap;overflow-wrap:anywhere}
+.m.me{align-self:flex-end;background:var(--out);border-top-right-radius:2px}.m.host{align-self:flex-start;background:var(--card);border-top-left-radius:2px}
+.m .t{float:right;margin:6px 0 0 10px;font-size:11px;color:var(--mut);display:inline-flex;gap:3px;align-items:center}.m .t .ic{width:14px;height:14px}
+.m .say{background:none;color:var(--mut);padding:2px;margin-left:4px;vertical-align:middle}
+.note{align-self:center;background:var(--warn);color:var(--fg);font-size:13px;padding:6px 10px;border-radius:8px;text-align:center;max-width:90%}
+.q{display:flex;gap:6px;overflow-x:auto;padding:8px 10px 2px}.q button{white-space:nowrap;flex:none;font-size:14px;padding:8px 12px}
+footer{display:flex;gap:8px;padding:8px 10px calc(8px + env(safe-area-inset-bottom));align-items:flex-end}
+footer textarea{resize:none;max-height:120px;border-radius:22px;line-height:1.3}
+footer button{width:46px;height:46px;padding:0;border-radius:50%;flex:none}.rec{background:#c0392b!important;color:#fff!important}
+</style></head><body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+ <symbol id="i-send" viewBox="0 0 24 24"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></symbol>
+ <symbol id="i-mic" viewBox="0 0 24 24"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><path d="M12 19v3"/></symbol>
+ <symbol id="i-stop" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2"/></symbol>
+ <symbol id="i-lang" viewBox="0 0 24 24"><path d="m5 8 6 6"/><path d="m4 14 6-6 2-3"/><path d="M2 5h12"/><path d="M7 2h1"/><path d="m22 22-5-10-5 10"/><path d="M14 18h6"/></symbol>
+ <symbol id="i-home" viewBox="0 0 24 24"><path d="m3 10 9-7 9 7v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></symbol>
+ <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
+ <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></symbol>
+ <symbol id="i-volume" viewBox="0 0 24 24"><path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></symbol>
+</svg>
+<section id="pick">
+ <h1>Choose your language · Elige tu idioma</h1>
+ <p>选择语言 · 言語を選択 · 언어 선택 · اختر لغتك · Выберите язык</p>
+ <div class="langs" id="langs"></div>
+ <div id="who" hidden><input id="name" maxlength="30" autocomplete="nickname"><button id="start"></button></div>
+</section>
+<section id="chat" hidden>
+ <header><div class="av"><svg class="ic"><use href="#i-home"/></svg></div><div><b id="title"></b><small id="sub"></small></div><span class="sp"></span>
+  <button class="alt" id="relang" aria-label="Language"><svg class="ic"><use href="#i-lang"/></svg></button></header>
+ <div id="body"></div>
+ <div class="q" id="q"></div>
+ <footer><textarea id="in" rows="1" dir="auto"></textarea><button id="mic" aria-label="Mic"><svg class="ic"><use href="#i-mic"/></svg></button><button id="send" aria-label="Send"><svg class="ic"><use href="#i-send"/></svg></button></footer>
+</section>
+<script>
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const ic=n=>`<svg class="ic"><use href="#i-${n}"/></svg>`;
+const BCP={es:'es-MX',en:'en-US',fr:'fr-FR',pt:'pt-BR',de:'de-DE',it:'it-IT',zh:'zh-CN',ja:'ja-JP',ko:'ko-KR',ar:'ar-SA',ru:'ru-RU',hi:'hi-IN'};
+const NAMES={es:'Español',en:'English',fr:'Français',pt:'Português',de:'Deutsch',it:'Italiano',zh:'中文',ja:'日本語',ko:'한국어',ar:'العربية',ru:'Русский',hi:'हिन्दी'};
+const store={get:k=>{try{return localStorage.getItem(k)}catch{return null}},set:(k,v)=>{try{localStorage.setItem(k,v)}catch{}}};
+// Cada teléfono tiene su propio chat (un código al azar guardado en el teléfono).
+let TOKEN=store.get('chatToken');if(!TOKEN){TOKEN=(crypto.randomUUID?crypto.randomUUID():Date.now().toString(36)+Math.random().toString(36).slice(2,12));store.set('chatToken',TOKEN)}
+let LANG=store.get('chatLang'),NAME=store.get('chatName')||'',PB={ui:{},phrases:[]},MSGS=[],LAST=0;
+let OUT=[];try{OUT=JSON.parse(store.get('chatOut')||'[]')}catch{}
+const ui=k=>(PB.ui[LANG]||PB.ui.en||{})[k]||(PB.ui.en||{})[k]||'';
+async function boot(){
+  try{PB=await (await fetch('/api/phrases')).json();store.set('pb',JSON.stringify(PB))}catch{try{PB=JSON.parse(store.get('pb'))||PB}catch{}}
+  $('#langs').innerHTML=Object.keys(NAMES).map(l=>`<button data-l="${l}" lang="${l}">${NAMES[l]}</button>`).join('');
+  if(LANG){openChat();return}
+  // Sin elección previa, se marca el idioma del teléfono: casi siempre es el suyo y se
+  // ahorra un paso. Puede cambiarlo tocando otro, la lista sigue a la vista.
+  const dispo=Object.keys(NAMES);
+  for(const l of (navigator.languages&&navigator.languages.length?navigator.languages:[navigator.language||''])){
+    const c=String(l).toLowerCase().split('-')[0];
+    if(dispo.includes(c)){$(`[data-l="${c}"]`)?.click();break}
+  }
+}
+$('#langs').onclick=e=>{const b=e.target.closest('button');if(!b)return;LANG=b.dataset.l;
+  document.querySelectorAll('.langs button').forEach(x=>x.classList.toggle('on',x===b));
+  $('#name').placeholder=ui('name');$('#name').value=NAME;$('#start').textContent=ui('start');$('#who').hidden=false;$('#name').focus()};
+$('#start').onclick=()=>{NAME=$('#name').value.trim();store.set('chatLang',LANG);store.set('chatName',NAME);openChat()};
+$('#relang').onclick=()=>{$('#chat').hidden=true;$('#pick').hidden=false};
+function openChat(){
+  document.documentElement.lang=LANG;document.documentElement.dir=LANG==='ar'?'rtl':'ltr';
+  $('#pick').hidden=true;$('#chat').hidden=false;$('#title').textContent=ui('chat');$('#sub').textContent=NAMES[LANG]||LANG;$('#in').placeholder=ui('ph');
+  $('#q').innerHTML=PB.phrases.filter(p=>p.side!=='host'&&p.t[LANG]).map(p=>`<button class="alt" data-p="${esc(p.t[LANG])}">${esc(p.t[LANG])}</button>`).join('');
+  render();poll();
+}
+const time=at=>at?new Date(at.replace(' ','T')+'Z').toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'}):'';
+const voice=()=>'speechSynthesis' in window&&speechSynthesis.getVoices().some(v=>v.lang.toLowerCase().startsWith(LANG));
+function render(){
+  const b=$('#body'),end=b.scrollHeight-b.scrollTop-b.clientHeight<60;
+  const rows=MSGS.map(m=>`<div class="m ${m.who}" dir="auto">${esc(m.text)}${m.who==='host'&&voice()?`<button class="say" data-say="${esc(m.text)}" aria-label="Listen">${ic('volume')}</button>`:''}<span class="t">${time(m.at)}${m.who==='me'?ic('check'):''}</span></div>`);
+  OUT.forEach(o=>rows.push(`<div class="m me" dir="auto">${esc(o.text)}<span class="t">${ic('clock')}</span></div>`));
+  if(MSGS.some(m=>m.who==='me')&&!MSGS.some(m=>m.who==='host'))rows.push(`<div class="note">${esc(ui('wait'))}</div>`);
+  if(OUT.length)rows.push(`<div class="note">${esc(ui('offline'))}</div>`);
+  b.innerHTML=rows.join('');if(end||!b.dataset.init){b.scrollTop=b.scrollHeight;b.dataset.init=1}
+}
+async function flush(){
+  while(OUT.length){const o=OUT[0];
+    try{const r=await fetch('/api/chat/'+TOKEN,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(o)});
+      if(!r.ok&&r.status!==400&&r.status!==422)throw 0}catch{return}
+    OUT.shift();store.set('chatOut',JSON.stringify(OUT))}
+}
+let pt;async function poll(){
+  clearTimeout(pt);await flush();
+  try{const n=await (await fetch('/api/chat/'+TOKEN+'?after='+LAST)).json();
+    if(n.length){const hostNew=n.filter(m=>m.who==='host');MSGS.push(...n);LAST=n[n.length-1].id;
+      if(hostNew.length&&document.hidden&&navigator.vibrate)navigator.vibrate(150)}}catch{}
+  render();pt=setTimeout(poll,3000);
+}
+function send(text){text=(text||'').trim();if(!text)return;OUT.push({text,lang:LANG,name:NAME});store.set('chatOut',JSON.stringify(OUT));render();poll()}
+$('#send').onclick=()=>{send($('#in').value);$('#in').value='';$('#in').style.height=''};
+$('#in').onkeydown=e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();$('#send').click()}};
+$('#in').oninput=e=>{e.target.style.height='';e.target.style.height=Math.min(e.target.scrollHeight,120)+'px'};
+$('#q').onclick=e=>{const b=e.target.closest('button');if(b)send(b.dataset.p)};
+$('#body').onclick=e=>{const b=e.target.closest('[data-say]');if(!b||!voice())return;speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(b.dataset.say);u.lang=BCP[LANG]||LANG;speechSynthesis.speak(u)};
+const SR=window.SpeechRecognition||window.webkitSpeechRecognition;let rec=null;
+if(!SR)$('#mic').hidden=true;
+$('#mic').onclick=()=>{if(rec){rec.stop();return}rec=new SR();rec.lang=BCP[LANG]||LANG;rec.interimResults=true;
+  rec.onresult=e=>{$('#in').value=[...e.results].map(x=>x[0].transcript).join('')};
+  rec.onend=()=>{$('#mic').classList.remove('rec');$('#mic').innerHTML=ic('mic');rec=null};
+  $('#mic').classList.add('rec');$('#mic').innerHTML=ic('stop');try{rec.start()}catch{rec=null}};
+if('speechSynthesis' in window){speechSynthesis.getVoices();speechSynthesis.onvoiceschanged=render}
+boot();
+</script></body></html>

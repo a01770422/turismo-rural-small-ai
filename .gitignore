@@ -1,0 +1,41 @@
+# OJO: en .gitignore el '#' solo abre comentario al PRINCIPIO de la línea.
+# Si se pone detrás de un patrón, pasa a formar parte del patrón y deja de ignorar nada.
+# Por eso cada explicación va en su propia línea.
+
+# Claves y configuración de cada instalación. NUNCA subir: .env.example es la plantilla.
+.env
+
+# Mensajes de los visitantes y reseñas. Son datos de personas: no salen de su equipo.
+data/local_app.db
+data/*.db-journal
+data/*.db-wal
+data/*.db-shm
+
+# Se generan solos al usar la app y son distintos en cada equipo.
+# traducciones y clima guardados
+data/cache.json
+# lugares descargados de la zona que haya elegido cada quien
+data/osm_places.json
+data/*.tmp
+
+# Datos de la finca de quien instale la app (precio, horario, teléfono).
+# En el repo va solo el ejemplo: data/operator.example.json
+data/operator.json
+
+# Entornos de Python (cualquier variante: .venv, .venv-pruebas, venv…)
+.venv*/
+venv*/
+env/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Ajustes del editor con rutas de esta máquina.
+.claude/
+.vscode/
+.idea/
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+desktop.ini

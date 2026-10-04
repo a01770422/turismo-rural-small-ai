@@ -1,0 +1,73 @@
+[
+ {
+  "id": 1,
+  "name": "Finca de café La Ladera",
+  "desc": "Recorrido por cafetal, tostado artesanal y comida de la casa.",
+  "tags": [
+   "cafe",
+   "finca",
+   "comida"
+  ],
+  "rating": 4.8,
+  "trust": 100,
+  "visits": 12,
+  "added": "2026-09-28",
+  "lat": 19.29,
+  "lon": -99.65,
+  "sponsored": false,
+  "source": "ejemplo"
+ },
+ {
+  "id": 2,
+  "name": "Cascada Los Tres Saltos",
+  "desc": "Caminata corta guiada por la comunidad hasta una cascada poco conocida.",
+  "tags": [
+   "cascada",
+   "caminata",
+   "naturaleza"
+  ],
+  "rating": 4.5,
+  "trust": 97,
+  "visits": 40,
+  "added": "2026-09-30",
+  "lat": 19.31,
+  "lon": -99.7,
+  "sponsored": false,
+  "source": "ejemplo"
+ },
+ {
+  "id": 3,
+  "name": "Taller de cerámica Doña Luz",
+  "desc": "Aprende a modelar barro con técnicas tradicionales.",
+  "tags": [
+   "artesania",
+   "taller",
+   "ceramica"
+  ],
+  "rating": 4.2,
+  "trust": 80,
+  "visits": 9,
+  "added": "2026-10-01",
+  "lat": 19.27,
+  "lon": -99.62,
+  "sponsored": false,
+  "source": "ejemplo"
+ },
+ {
+  "id": 4,
+  "name": "Mirador Cerro Grande",
+  "desc": "Vista panorámica; punto muy visitado.",
+  "tags": [
+   "mirador",
+   "naturaleza"
+  ],
+  "rating": 4.6,
+  "trust": null,
+  "visits": 5200,
+  "added": "2026-06-10",
+  "lat": 19.33,
+  "lon": -99.68,
+  "sponsored": true,
+  "source": "ejemplo"
+ }
+]

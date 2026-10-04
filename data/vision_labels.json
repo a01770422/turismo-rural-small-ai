@@ -1,0 +1,221 @@
+{
+  "_nota": "Etiquetas para identificar fotos sin internet. 'en' es lo que se le pregunta al modelo (CLIP acierta mucho más en inglés); 'es' es lo que se le muestra a la persona y lo que se traduce al idioma del visitante. Quien conozca la zona puede añadir, quitar o corregir entradas aquí sin tocar el código: son solo textos. Conviene no pasar de ~15 etiquetas por grupo; con demasiadas opciones parecidas el modelo se confunde.",
+  "plantilla": "a photo of {}",
+  "grupos": [
+    {
+      "id": "lugar",
+      "nombre": "Lugares",
+      "icon": "pin",
+      "labels": [
+        {
+          "en": "a waterfall",
+          "es": "una cascada"
+        },
+        {
+          "en": "a scenic viewpoint over a valley",
+          "es": "un mirador"
+        },
+        {
+          "en": "an old church",
+          "es": "una iglesia antigua"
+        },
+        {
+          "en": "a museum building",
+          "es": "un museo"
+        },
+        {
+          "en": "stone ruins of an old building",
+          "es": "unas ruinas"
+        },
+        {
+          "en": "a bridge over a river",
+          "es": "un puente"
+        },
+        {
+          "en": "a cave entrance",
+          "es": "una cueva"
+        },
+        {
+          "en": "a lake",
+          "es": "un lago"
+        },
+        {
+          "en": "a river",
+          "es": "un río"
+        },
+        {
+          "en": "a mountain",
+          "es": "un cerro o una montaña"
+        },
+        {
+          "en": "a hiking trail in the countryside",
+          "es": "un sendero"
+        },
+        {
+          "en": "a town square with trees",
+          "es": "una plaza"
+        },
+        {
+          "en": "a farm field with crops",
+          "es": "un campo de cultivo"
+        },
+        {
+          "en": "a historic steam locomotive",
+          "es": "una locomotora antigua"
+        }
+      ]
+    },
+    {
+      "id": "naturaleza",
+      "nombre": "Plantas y animales",
+      "icon": "compass",
+      "labels": [
+        {
+          "en": "a flower",
+          "es": "una flor"
+        },
+        {
+          "en": "a cactus",
+          "es": "un cactus"
+        },
+        {
+          "en": "a large tree",
+          "es": "un árbol grande"
+        },
+        {
+          "en": "a bird",
+          "es": "un ave"
+        },
+        {
+          "en": "a butterfly",
+          "es": "una mariposa"
+        },
+        {
+          "en": "a horse",
+          "es": "un caballo"
+        },
+        {
+          "en": "a cow",
+          "es": "una vaca"
+        },
+        {
+          "en": "a dog",
+          "es": "un perro"
+        },
+        {
+          "en": "an insect",
+          "es": "un insecto"
+        },
+        {
+          "en": "a snake",
+          "es": "una serpiente"
+        },
+        {
+          "en": "a fish",
+          "es": "un pez"
+        }
+      ]
+    },
+    {
+      "id": "comida",
+      "nombre": "Comida",
+      "icon": "gift",
+      "labels": [
+        {
+          "en": "a plate of food",
+          "es": "un plato de comida"
+        },
+        {
+          "en": "a drink in a glass",
+          "es": "una bebida"
+        },
+        {
+          "en": "fresh fruit",
+          "es": "fruta fresca"
+        },
+        {
+          "en": "bread or pastry",
+          "es": "pan o repostería"
+        },
+        {
+          "en": "corn tortillas",
+          "es": "tortillas de maíz"
+        },
+        {
+          "en": "fish or seafood",
+          "es": "pescado o mariscos"
+        },
+        {
+          "en": "a chili pepper",
+          "es": "un chile"
+        },
+        {
+          "en": "a tamale wrapped in corn husk",
+          "es": "un tamal"
+        }
+      ]
+    },
+    {
+      "id": "servicio",
+      "nombre": "Señales y servicios",
+      "icon": "list",
+      "labels": [
+        {
+          "en": "a sign with written text",
+          "es": "un letrero con texto"
+        },
+        {
+          "en": "a map or information board",
+          "es": "un mapa o tablero informativo"
+        },
+        {
+          "en": "a public restroom",
+          "es": "un baño"
+        },
+        {
+          "en": "a parking lot",
+          "es": "un estacionamiento"
+        },
+        {
+          "en": "a ticket booth or entrance gate",
+          "es": "una taquilla o entrada"
+        },
+        {
+          "en": "a bus or van",
+          "es": "un autobús o una camioneta"
+        }
+      ]
+    },
+    {
+      "id": "aviso",
+      "nombre": "Revisar el terreno",
+      "icon": "alert",
+      "labels": [
+        {
+          "en": "garbage or litter on the ground",
+          "es": "basura tirada"
+        },
+        {
+          "en": "a trail blocked by fallen branches",
+          "es": "un sendero bloqueado"
+        },
+        {
+          "en": "a damaged or broken structure",
+          "es": "una estructura dañada"
+        },
+        {
+          "en": "a plant leaf with brown spots or disease",
+          "es": "una hoja con manchas o enferma"
+        },
+        {
+          "en": "flooded or muddy ground",
+          "es": "terreno inundado o lodoso"
+        },
+        {
+          "en": "everything looks fine and well kept",
+          "es": "todo se ve bien"
+        }
+      ]
+    }
+  ]
+}
