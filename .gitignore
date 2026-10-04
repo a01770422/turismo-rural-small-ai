@@ -39,3 +39,7 @@ __pycache__/
 .DS_Store
 Thumbs.db
 desktop.ini
+
+# La configuración de la demo lleva la contraseña de MySQL: se crea en el servidor.
+deploy/plantillas/config.php
+deploy/dist/

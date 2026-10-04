@@ -27,25 +27,42 @@ LOCAL = "http://127.0.0.1:8000"
 IDIOMAS = ["es", "en", "fr", "pt", "de", "it", "zh", "ja", "ko", "ar", "ru", "hi"]
 
 
+# El motor de los modelos son 22 MB que no cambian nunca. No se vuelven a copiar en cada
+# compilación: además de tardar, el antivirus de Windows abre el .wasm para escanearlo justo
+# después y deja la carpeta bloqueada, lo que hacía fallar la limpieza.
+VENDOR = Path("static") / "vendor"
+MOTOR = VENDOR / "ort-wasm-simd-threaded.jsep.wasm"   # el archivo grande, el que de verdad importa
+
+
+def motor_ya_copiado(destino: Path) -> bool:
+    """Que la carpeta exista no basta: una compilación anterior pudo dejarla a medias."""
+    origen = Path(__file__).resolve().parent.parent / "src" / MOTOR
+    copia = destino / MOTOR
+    return copia.is_file() and origen.is_file() and copia.stat().st_size == origen.stat().st_size
+
+
 def limpiar(carpeta: Path):
-    """Deja la carpeta vacía. Se vacía en vez de borrarla porque en Windows no se puede
-    eliminar un directorio que algún proceso tenga abierto (el explorador, una terminal
-    situada dentro). Si quedaran archivos de una construcción anterior, se acabaría
-    subiendo una mezcla de versiones sin notarlo."""
-    if not carpeta.exists():
-        carpeta.mkdir(parents=True)
-        return
-    # El antivirus de Windows abre el .wasm de 21 MB para escanearlo justo después de
-    # copiarlo, así que el primer intento suele fallar. Se reintenta con pausas crecientes.
+    """Deja la carpeta vacía, conservando el motor ya copiado. Se vacía en vez de borrarla
+    porque en Windows no se puede eliminar un directorio que algún proceso tenga abierto."""
+    carpeta.mkdir(parents=True, exist_ok=True)
     for hijo in carpeta.iterdir():
-        for intento in range(6):
-            try:
-                shutil.rmtree(hijo) if hijo.is_dir() else hijo.unlink()
-                break
-            except PermissionError:
-                if intento == 5:
-                    sys.exit(f"No se pudo borrar {hijo}. Cierra lo que lo tenga abierto y repite.")
-                time.sleep(2 * (intento + 1))
+        if hijo.name == "static" and motor_ya_copiado(carpeta):
+            for nieto in hijo.iterdir():        # dentro de static, todo menos vendor
+                if nieto.name != "vendor":
+                    borrar(nieto)
+            continue
+        borrar(hijo)
+
+
+def borrar(ruta: Path):
+    for intento in range(5):
+        try:
+            shutil.rmtree(ruta) if ruta.is_dir() else ruta.unlink()
+            return
+        except PermissionError:
+            if intento == 4:
+                sys.exit(f"No se pudo borrar {ruta}. Cierra lo que lo tenga abierto y repite.")
+            time.sleep(1 + intento)
 
 
 def traer(ruta):
@@ -76,6 +93,8 @@ def ajustar_para_demo(html: Path):
          "loadOp();getTpl('es');"),
         ("setInterval(()=>{if(!document.hidden)loadChats()},4000);", ""),
         ("<main>", "<main>" + AVISO),
+        # En la demo el chat es un archivo, no la ruta /chat del servidor.
+        ('href="chat.html"', 'href="chat.html"'),
     ]
     for viejo, nuevo in cambios:
         if viejo not in s:
@@ -119,9 +138,12 @@ def main():
     (SALIDA / "api" / "share.json").write_text('{"url":"","lan":false}', encoding="utf-8")
 
     # --- archivos del navegador ---
-    shutil.copytree(RAIZ / "src" / "static", SALIDA / "static",
-                    ignore=shutil.ignore_patterns("chat.html"))
-    for f in ("index.html",):
+    ya = motor_ya_copiado(SALIDA)
+    shutil.copytree(RAIZ / "src" / "static", SALIDA / "static", dirs_exist_ok=True,
+                    ignore=shutil.ignore_patterns("vendor") if ya else None)
+    if ya:
+        print("  (el motor de 22 MB ya estaba: no se recopia)")
+    for f in ("index.html", "chat.html"):
         shutil.move(str(SALIDA / "static" / f), str(SALIDA / f))
 
     # La portada se sirve como archivo, no por /hero.
@@ -133,8 +155,13 @@ def main():
     # --- lo que sí necesita ejecutarse: traducir ---
     plantillas = RAIZ / "deploy" / "plantillas"
     shutil.copy(plantillas / "api.php", SALIDA / "api" / "index.php")
+    shutil.copy(plantillas / "datos.php", SALIDA / "api" / "datos.php")
+    shutil.copy(plantillas / "esquema.sql", SALIDA / "api" / "_esquema.sql")
+    shutil.copy(plantillas / "config.example.php", SALIDA / "api" / "config.example.php")
     shutil.copy(plantillas / "raiz.htaccess", SALIDA / ".htaccess")
     shutil.copy(plantillas / "api.htaccess", SALIDA / "api" / ".htaccess")
+    # config.php lleva la contraseña: se crea a mano en el servidor y no se sube nunca,
+    # ni desde aquí ni al repositorio.
 
     # El frasario y las tablas de pronunciación los necesita el PHP.
     shutil.copy(RAIZ / "data" / "phrases.json", SALIDA / "api" / "_phrases.json")

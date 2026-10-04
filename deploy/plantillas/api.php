@@ -10,6 +10,7 @@
  */
 declare(strict_types=1);
 header('Content-Type: application/json; charset=utf-8');
+require __DIR__ . '/datos.php';
 
 $ruta = trim((string)($_GET['r'] ?? ''), '/');
 $AQUI = __DIR__;
@@ -62,6 +63,52 @@ function normaliza(string $t): string {
 
 /* ---------- traducir ---------- */
 $cuerpo = json_decode((string)file_get_contents('php://input'), true) ?: [];
+$POST = ($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST';
+
+/* ---------- reseñas ---------- */
+// Mismo formato que la app real, para que el navegador no note la diferencia.
+if (preg_match('~^places/([A-Za-z0-9_-]{1,80})/reviews$~', $ruta, $m)) {
+    $placeId = $m[1];
+    if (!$POST) {
+        $d = reseñasDe($placeId);
+        salir(['reviews' => $d['reviews'], 'n' => $d['n'], 'avg' => $d['avg'],
+               // El análisis de temas usa un léxico que vive en la app completa.
+               'summary' => ['n' => $d['n'], 'positivas' => 0, 'negativas' => 0, 'temas' => []],
+               'sin_base' => $d['sin_base'] ?? false]);
+    }
+    $r = guardarReseña($placeId, (string)($cuerpo['author'] ?? ''),
+                       (int)($cuerpo['rating'] ?? 0), (string)($cuerpo['text'] ?? ''));
+    if (isset($r['error'])) salir(['detail' => $r['error']], 422);
+    salir($r);
+}
+
+/* ---------- chat del visitante ---------- */
+if (preg_match('~^chat/([A-Za-z0-9-]{1,64})$~', $ruta, $m)) {
+    $chatId = $m[1];
+    if ($POST) {
+        $texto = (string)($cuerpo['text'] ?? '');
+        $lang  = preg_replace('/[^a-z]/', '', strtolower((string)($cuerpo['lang'] ?? 'es')));
+        // Se guarda también en español para que quien atiende lo lea sin traducir a mano.
+        $trad = $lang === 'es' ? null : (delFrasario($texto, $lang, 'es') ?? porInternet($texto, $lang, 'es')[0]);
+        $r = guardarMensaje($chatId, (string)($cuerpo['name'] ?? ''), $lang, $texto, $trad);
+        if (isset($r['error'])) salir(['detail' => $r['error']], 422);
+        salir(['ok' => true]);
+    }
+    $after = (int)($_GET['after'] ?? 0);
+    $c = conversacion($chatId);
+    if (!empty($c['sin_base'])) salir([]);
+    $out = [];
+    foreach ($c['messages'] as $f) {
+        $id = (int)$f['id'];
+        if ($f['original_text']) {
+            $out[] = ['id' => $id * 2, 'who' => 'me', 'text' => $f['original_text'], 'at' => $f['created_at']];
+        }
+        if ($f['final_response'] && $f['status'] === 'synced') {
+            $out[] = ['id' => $id * 2 + 1, 'who' => 'host', 'text' => $f['final_response'], 'at' => $f['created_at']];
+        }
+    }
+    salir(array_values(array_filter($out, fn($x) => $x['id'] > $after)));
+}
 
 /** Busca la frase en el frasario: instantáneo y sin salir a internet. */
 function delFrasario(string $texto, string $src, string $dst): ?string {
