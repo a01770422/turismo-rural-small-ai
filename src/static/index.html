@@ -939,16 +939,16 @@ async function mirarFoto(file){
     const tr=VL&&VL!=='auto'&&VL!=='es'?await translate(mejor.es,'es',VL):null;
     if(seq!==MSEQ)return;
     $('#mres').innerHTML=r.resultados.map((x,i)=>`<div class="hit${i?'':' mejor'}">
-        <div class="l"><span>${esc(x.es)}</span><span class="pc">${(x.pct*100).toFixed(0)}%</span></div>
+        <div class="l"><span>${esc(T(x.es))}</span><span class="pc">${(x.pct*100).toFixed(0)}%</span></div>
         ${i===0&&tr&&tr.text?`<div class="tr" dir="auto">${esc(tr.text)}</div>`:''}
         <div class="bar"><i style="width:${(x.pct*100).toFixed(0)}%"></i></div></div>`).join('')
-      +`<div class="acts"><button class="alt sm" data-msay="1">${ic('volume')}Escuchar</button>
-        <button class="alt sm" data-msend="1">${ic('send')}Decírselo al visitante</button></div>`
+      +`<div class="acts"><button class="alt sm" data-msay="1">${ic('volume')}${T('Escuchar')}</button>
+        <button class="alt sm" data-msend="1">${ic('send')}${T('Decírselo al visitante')}</button></div>`
       +(r.resultados[1]&&mejor.pct-r.resultados[1].pct<0.15
-        ?`<p class="warn">${ic('help')} No está claro: se parece casi igual a las tres. Acota el grupo o toma la foto más de cerca.</p>`:'')
-      +`<p class="fix">${ic('alert')} Es una estimación del equipo, no una certeza: compruébalo antes de darlo por bueno.
-        ${r.desfasado?`<br><b>Las etiquetas cambiaron desde la última vez</b>, así que esto puede no corresponder.
-          <button class="alt sm" data-recalc="1">${ic('refresh')}Recalcular ahora</button>`:''}</p>`;
+        ?`<p class="warn">${ic('help')} ${T('No está claro: se parece casi igual a las tres. Acota el grupo o toma la foto más de cerca.')}</p>`:'')
+      +`<p class="fix">${ic('alert')} ${T('Es una estimación del equipo, no una certeza: compruébalo antes de darlo por bueno.')}
+        ${r.desfasado?`<br><b>${T('Las etiquetas cambiaron desde la última vez')}</b>${T(', así que esto puede no corresponder.')}
+          <button class="alt sm" data-recalc="1">${ic('refresh')}${T('Recalcular ahora')}</button>`:''}</p>`;
     $('#mres').dataset.top=mejor.es;
   }catch(e){if(seq!==MSEQ)return;
     const m=String(e&&e.message||e);

@@ -1,88 +1,99 @@
 # Turismo Rural — Small AI
 
-Una app para que quien atiende un lugar de turismo rural pueda **hablar con visitantes de cualquier idioma, aunque no haya internet**.
+*[Leer en español](README.es.md)*
 
-Corre en un equipo modesto, sin servidores ni cuentas de pago. Lo que necesita conexión está separado de lo que no, y la app dice en todo momento de dónde salió cada respuesta.
+An app that lets someone running a rural tourism site **talk with visitors in any language, even with no internet**.
 
-## Qué hace
+It runs on a modest device, with no servers and no paid accounts. What needs a connection is kept strictly separate from what doesn't, and the app always tells you where each answer came from.
+
+## What it does
 
 | | |
 |---|---|
-| **Conversar** | Traductor cara a cara: cada persona escribe o habla en su idioma y lee en el suyo. Traduce mientras se escribe. 12 idiomas sin internet con frases guardadas |
-| **Mirar** | Se toma una foto y el equipo dice qué hay en ella (un mirador, una planta enferma, basura en el sendero). **La foto no sale del equipo** |
-| **Explorar** | Lugares reales de la zona descargados de OpenStreetMap para usarlos sin conexión |
-| **Mensajes** | Los visitantes escriben desde su teléfono o por Telegram; se guardan y se envían cuando vuelve la señal |
+| **Talk** | A face-to-face translator: each person writes or speaks in their own language and reads in theirs. It translates as you type. 12 languages work offline from a built-in phrasebook |
+| **Look** | Take a photo and the device tells you what's in it (a viewpoint, a diseased plant, litter on the trail). **The photo never leaves the device** |
+| **Explore** | Real nearby places pulled from OpenStreetMap and saved for offline use |
+| **Messages** | Visitors write from their phone or over Telegram; messages are stored and sent when the signal comes back |
 
-## Cómo se abre
+## Running it
 
 ```bash
 python -m venv .venv
-.venv/Scripts/pip install -r requirements.txt   # en Linux/macOS: .venv/bin/pip
+.venv/Scripts/pip install -r requirements.txt   # Linux/macOS: .venv/bin/pip
 cp .env.example .env
-.venv/Scripts/python -m src.main                # en Linux/macOS: .venv/bin/python
+.venv/Scripts/python -m src.main                # Linux/macOS: .venv/bin/python
 ```
 
-Luego, en el navegador:
+Then, in the browser:
 
-- **http://127.0.0.1:8000** — el panel de quien atiende
-- **http://127.0.0.1:8000/chat** — el chat del visitante
+- **http://127.0.0.1:8000** — the host's panel
+- **http://127.0.0.1:8000/chat** — the visitor's chat
 
-Con `HOST=0.0.0.0` en `.env`, los visitantes conectados a la misma wifi pueden abrir el chat desde su teléfono. El panel sigue respondiendo solo en este equipo.
+With `HOST=0.0.0.0` in `.env`, visitors on the same wifi can open the chat from their phone. The panel still answers only on this device.
 
-La app se abre en el idioma del navegador y, si no está traducido, en inglés. Se cambia con el selector de la cabecera.
+The interface opens in the browser's language and falls back to English. You can change it from the selector in the header.
 
-## Los conceptos de "Small AI" en el código
+## Where the "Small AI" ideas live in the code
 
-| Concepto | Dónde está |
+| Idea | Where it is |
 |---|---|
-| **Problema único y acotado** | Ocho intenciones fijas, un dispositivo, sin centro de datos |
-| **Sin conexión / en el dispositivo** | Frasario e intenciones en JSON; CLIP y Whisper corriendo en el navegador; caché en disco |
-| **Cuantización** | El modelo de imagen va a 8 bits: 87 MB en vez de 578. Los vectores de las etiquetas, a 16 |
-| **Guardar y reenviar** | [`src/sync.py`](src/sync.py): los mensajes esperan en SQLite y salen cuando hay señal |
-| **Reconocimiento de voz** | El del navegador (necesita internet) y **Whisper en el propio equipo** (no la necesita) |
-| **Visión por computadora** | CLIP compara la foto con etiquetas editables en [`data/vision_labels.json`](data/vision_labels.json) |
+| **One well-defined problem** | Eight fixed intents, one device, no datacenter |
+| **Offline / on-device** | Phrasebook and intents as JSON; CLIP and Whisper running in the browser; cache on disk |
+| **Quantization** | The image model runs at 8 bits: 87 MB instead of 578. The label vectors at 16 |
+| **Store-and-forward** | [`src/sync.py`](src/sync.py): messages wait in SQLite and go out when there's signal |
+| **Speech recognition** | The browser's (needs internet) and **Whisper on the device itself** (doesn't) |
+| **Computer vision** | CLIP compares the photo against labels you can edit in [`data/vision_labels.json`](data/vision_labels.json) |
 
-Comprobado cortando la red por completo: identificar una foto y transcribir voz funcionan con **cero peticiones a internet**.
+Verified with the network fully cut: identifying a photo and transcribing speech both run with **zero network requests**.
 
-## Qué sale del equipo y qué no
+### The part worth a closer look
 
-- **Nunca salen:** las fotos de *Mirar* y el audio del micrófono sin conexión. Se procesan aquí.
-- **Sí sale:** el texto que se manda a traducir (MyMemory) y los mensajes por Telegram, si se usa ese canal.
-- Los mensajes ya enviados se borran tras `RETENTION_DAYS` (30 días por defecto).
-- Las reseñas solo piden un alias. **No están verificadas** y la app lo dice.
-- Los mensajes delicados (queja, reembolso, accidente) se marcan ⚠ y la IA no redacta respuesta: contesta una persona.
+CLIP ships as 578 MB. Two decisions bring it down to **87 MB**.
 
-Los datos de cada instalación (`.env`, la base de datos, los lugares descargados) están fuera de git a propósito.
+Quantizing to 8 bits is the obvious one. The other is that CLIP has two halves — one reads images, the other reads text — and the text half only exists to turn labels into vectors. That can be done once, ahead of time. So the precomputed vectors ship as a 60 KB file and the text half, another 62 MB, is never downloaded.
 
-## Estructura
+Measured cost of that compression: **0.02 percentage points** of drift against running it uncompressed, with no change in ranking.
+
+## What leaves the device and what doesn't
+
+- **Never leaves:** the photos in *Look* and the audio from the offline microphone. Both are processed here.
+- **Does leave:** text sent out for translation (MyMemory), and messages over Telegram if that channel is in use.
+- Sent messages are deleted after `RETENTION_DAYS` (30 by default).
+- Reviews only ask for an alias. They are **not verified**, and the app says so.
+- Sensitive messages (complaints, refunds, accidents) are flagged ⚠ and the AI writes no reply: a person answers.
+
+Per-installation data (`.env`, the database, downloaded places) is deliberately kept out of git.
+
+## Layout
 
 ```
-src/api.py          rutas HTTP
-src/sync.py         guardar y reenviar
-src/utils.py        intenciones, traducción, reseñas (solo librería estándar)
-src/places_osm.py   descarga de OpenStreetMap
-src/static/ai.js    modelos que corren en el navegador
-data/*.json         frases, intenciones, etiquetas y textos de la app: editables sin tocar código
+src/api.py          HTTP routes
+src/sync.py         store-and-forward
+src/utils.py        intents, translation, reviews (standard library only)
+src/places_osm.py   OpenStreetMap download
+src/static/ai.js    models that run in the browser
+data/*.json         phrases, intents, labels and interface text: editable without touching code
+deploy/             builds the static+PHP demo for shared hosting
 ```
 
-Los archivos de `data/` están pensados para que los corrija quien conoce la zona: son texto, no código.
+The files under `data/` are meant to be corrected by whoever knows the area: they're text, not code.
 
-## Pruebas
+## Tests
 
 ```bash
 .venv/Scripts/python -m pytest -q
 ```
 
-## Límites conocidos
+## Known limits
 
-Están todos en **[DATASETS.md](DATASETS.md)**: de dónde viene cada dato, qué licencia tiene y qué **no** cubre. En resumen:
+All of them are in **[DATASETS.md](DATASETS.md)**: where every piece of data comes from, its licence, and what it does **not** cover. In short:
 
-- Las traducciones a idiomas distintos del español y el inglés las generó una IA y **no las ha revisado un hablante nativo**.
-- No hay ninguna lengua indígena ni jerga local: hay que añadirlas con alguien que las hable.
-- CLIP se entrenó sobre todo con imágenes de EE. UU. y Europa: acierta menos con paisajes y comida de otras regiones. Es una pista, no un diagnóstico.
-- Whisper tiny se equivoca bastante más que el micrófono del navegador.
-- Las cifras del problema en `DATASETS.md` siguen marcadas como `TODO`: hay que completarlas con el dato exacto, el país y el año.
+- Translations into languages other than Spanish and English were produced by an AI and have **not been reviewed by a native speaker**.
+- There is no indigenous language and no local slang yet. Adding them takes a speaker, not an AI.
+- CLIP was trained mostly on images from the US and Europe, so it is weaker on landscapes and food from other regions. It gives a hint, not a diagnosis.
+- Whisper tiny makes considerably more mistakes than the browser's microphone.
+- The problem figures in `DATASETS.md` are still marked `TODO`: they need the exact number, country and year.
 
-## Créditos y licencias
+## Credits and licences
 
-Datos de lugares © colaboradores de **OpenStreetMap** (ODbL). Traducción: **MyMemory**. Clima: **Open-Meteo**. Modelos: **CLIP** (MIT) y **Whisper** (Apache 2.0) vía **Transformers.js** (Apache 2.0), incluido en `src/static/vendor/` para que la app arranque sin conexión.
+Place data © **OpenStreetMap** contributors (ODbL). Translation: **MyMemory**. Weather: **Open-Meteo**. Models: **CLIP** (MIT) and **Whisper** (Apache 2.0) via **Transformers.js** (Apache 2.0), vendored in `src/static/vendor/` so the app starts with no connection.
