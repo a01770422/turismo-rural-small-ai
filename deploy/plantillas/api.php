@@ -29,6 +29,36 @@ function archivo(string $nombre): never {
     exit;
 }
 
+/* Diagnóstico: dice en una línea si la base quedó bien conectada. Sin esto, configurarla
+   es a ciegas: la demo no falla cuando no hay base, así que no se nota si algo salió mal. */
+if ($ruta === 'estado') {
+    $cfg = @include __DIR__ . '/config.php';
+    $hay = is_array($cfg) && !empty($cfg['base']);
+    $out = [
+        'config' => is_array($cfg) ? ($hay ? 'listo' : 'existe pero sin rellenar') : 'falta config.php',
+        'base'   => $hay ? (string)$cfg['base'] : null,
+        'conecta' => false, 'tablas' => [], 'detalle' => null,
+    ];
+    if ($hay) {
+        try {
+            $dsn = "mysql:host={$cfg['servidor']};dbname={$cfg['base']};charset=utf8mb4";
+            $pdo = new PDO($dsn, (string)$cfg['usuario'], (string)$cfg['contrasena'],
+                           [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
+            $out['conecta'] = true;
+            $out['tablas'] = $pdo->query('SHOW TABLES')->fetchAll(PDO::FETCH_COLUMN);
+            foreach (['reviews', 'messages'] as $t) {
+                if (in_array($t, $out['tablas'], true)) {
+                    $out['filas'][$t] = (int)$pdo->query("SELECT COUNT(*) FROM `$t`")->fetchColumn();
+                }
+            }
+        } catch (Throwable $e) {
+            // Sin la contraseña ni datos internos: solo lo justo para saber qué corregir.
+            $out['detalle'] = preg_replace('/\s+/', ' ', substr($e->getMessage(), 0, 160));
+        }
+    }
+    salir($out);
+}
+
 /* ---------- lo que es solo lectura ---------- */
 $FIJOS = ['ui', 'phrases', 'vision-labels', 'vision-embeddings', 'langs', 'operator', 'area', 'share'];
 if (in_array($ruta, $FIJOS, true)) archivo($ruta);
